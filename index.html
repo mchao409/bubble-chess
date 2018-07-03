@@ -6,38 +6,21 @@
 		<svg id="svg">
 		</svg>
 <script>
-
-	function makeBoard(h1, h2, w1, w2, r) {
-		var verticalNicks = 4;
-		var boardH = h2-h1;
-		var distanceNicks = Math.floow(boardH/verticalNicks);
-		var boardW = w2-w1;
-		var distanceNicksH = Math.floow(boardW/horizontalNicks);
-
-		var svg = document.getElementById('svg');
-		for(var i = h1; i < h2; i+= distanceNicks) {
-			for(var k = w1; k < w2+1; k+= distanceNicksH) {
-				var circle = document.createElementNS(svgns, 'circle');
-				circle.setAttributeNS(null, 'cx', k);
-				circle.setAttributeNS(null, 'cy', i);
-				circle.setAttributeNS(null, 'r', r);
-				document.getElementById('svg').appendChild(circle);
-		}
-	}
-
-	}
-
+	// Make the board 
 	var svgns = "http://www.w3.org/2000/svg";
 	var margin = 0.125;
-	var marginH = 0.3;
+	var marginW = 0.3;
 	var verticalNicks = 13;
 	var horizontalNicks = 5;
 
 	var startingHeight = window.innerHeight * margin;
 	var boardH = window.innerHeight - 2 * startingHeight;
-	var distanceNicks = Math.floor(boardH/verticalNicks);
+	console.log(startingHeight);
+	console.log(window.innerHeight);
+	console.log(boardH);
+	var distanceNicks = boardH/verticalNicks;
 
-	var startingWidth = window.innerWidth * marginH;
+	var startingWidth = window.innerWidth * marginW;
 	var boardW = window.innerWidth - 2 * startingWidth;
 	var distanceNicksH = Math.floor(boardW/horizontalNicks);
 	var circleRadius = Math.floor(distanceNicks/2.0) - 3;
@@ -51,13 +34,35 @@
 	svg.setAttribute("height", window.innerHeight);
 	var safeZones = [];
 	safeZones[0] = [startingHeight+distanceNicks];
-	console.log(startingWidth);
+	
+	// Create circles, rectangles, lines
+
+	for(var i = 0; i < verticalNicks; i++) {
+		var line = document.createElementNS(svgns, 'line');
+		line.setAttributeNS(null, 'x1', startingWidth);
+		line.setAttributeNS(null, 'y1', startingHeight + i*distanceNicks);
+		line.setAttributeNS(null,'x2', startingWidth + (horizontalNicks-1)*distanceNicksH);
+		line.setAttributeNS(null, 'y2', startingHeight + i * distanceNicks);
+		line.setAttributeNS(null,'stroke', 'black');
+		document.getElementById('svg').appendChild(line);
+	}
+	for(var k = 0; k < horizontalNicks; k++) {
+		var line = document.createElementNS(svgns, 'line');
+		line.setAttributeNS(null, 'x1', startingWidth + k*distanceNicksH);
+		line.setAttributeNS(null, 'y1', startingHeight);
+		line.setAttributeNS(null, 'x2', startingWidth + k*distanceNicksH);
+		line.setAttributeNS(null, 'y2', startingHeight + (verticalNicks-1)*distanceNicks + circleRadius);
+		line.setAttributeNS(null,"stroke", "black")
+		line.setAttribute('class', 'vertical');
+		document.getElementById('svg').appendChild(line);
+	}
 
 	for(var i = 0; i < verticalNicks; i++) {
 		for(var k = 0; k < horizontalNicks; k++) {
 			if(i >= 5 && i <= verticalNicks-6) {
 				continue;
 			}
+
 			if((i % 2 == 1 && k % 2 == 1) || (i == 2 && k == 2) || (i == verticalNicks-3 && k == horizontalNicks-3)) {
 				var circle = document.createElementNS(svgns, 'circle');
 				circle.setAttributeNS(null, 'cx', startingWidth + k*distanceNicksH);
@@ -79,9 +84,11 @@
 				rect.style.strokeWidth = 1;
 				document.getElementById('svg').appendChild(rect);
 			}
-
 		}
 	}
+
+
+
 
 
 
