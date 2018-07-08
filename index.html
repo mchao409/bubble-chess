@@ -2,13 +2,17 @@
 <html>
 <head>
 <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
-
+<link rel="stylesheet" type="text/css" href="index.css">
 <body>
-		<svg id="svg">
-		</svg>
+		<svg id = "svg_left"></svg>
+		<svg id="svg_board"></svg>
+
+		<svg id= "svg_right"></svg>
+
+<script src="boardDrawing.js", type="text/javascript"> </script>
 <script>
 	function findClosest(num, arr) {
-		// Finds the value closest to num in arr
+		// Returns size 2 array, first element is closest element, second element is difference between num and the closest element
 		var currClosest = arr[0];
 		var currDiff = Math.abs(num-currClosest);
 		for(var i = 0; i < arr.length; i++) {
@@ -21,79 +25,62 @@
 	}
 	// Make the board 
 	var svgns = "http://www.w3.org/2000/svg";
-	var margin = 0.1;
+	var margin = 0.15;
 	var marginW = 0.3;
-	var verticalNicks = 13;
-	var horizontalNicks = 5;
+	var verticalNicks = 12;
+	var horizontalNicks = 4;
 
 	var startingHeight = window.innerHeight * margin;
 	var boardH = window.innerHeight - 2 * startingHeight;
-	console.log(startingHeight);
-	console.log(window.innerHeight);
-	console.log(boardH);
-	var distanceNicks = boardH/verticalNicks;
+	var distanceNicks = boardH*1.0/verticalNicks;
 
 	var startingWidth = window.innerWidth * marginW;
-	var boardW = window.innerWidth - 2 * startingWidth;
-	var distanceNicksH = Math.floor(boardW/horizontalNicks);
+	var boardW = window.innerWidth - 2 * window.innerWidth * marginW;
+	var distanceNicksH = boardW*1.0/horizontalNicks;
 	var circleRadius = Math.floor(distanceNicks/2.0) - 3;
-	// console.log(document.body.scrollWidth);
-	var svg = document.getElementById('svg');
-	svg.setAttribute("width", window.innerWidth);
-	svg.setAttribute("height", window.innerHeight);
-	var safeZones = [];
-	safeZones[0] = [startingHeight+distanceNicks];
-	
+	startingWidth = circleRadius * 2 + 2;
+	startingHeight = circleRadius * 2 + 2;
+
+	var svg_board = document.getElementById('svg_board');
+	svg_board.setAttribute("width", boardW + 4 * circleRadius+3);
+	svg_board.setAttribute("height", boardH + 4 * circleRadius + 3);
+
+
+
 	// Create circles, rectangles, lines
+
+	// Holds y-coordinate of all vertical nicks
 	var vertical_nicks = [];
-	for(var i = 0; i < verticalNicks; i++) {
-		// var line = document.createElementNS(svgns, 'line');
-		// line.setAttributeNS(null, 'x1', startingWidth);
-		// line.setAttributeNS(null, 'y1', startingHeight + i*distanceNicks);
-		// line.setAttributeNS(null,'x2', startingWidth + (horizontalNicks-1)*distanceNicksH);
-		// line.setAttributeNS(null, 'y2', startingHeight + i * distanceNicks);
-		// line.setAttributeNS(null,'stroke', 'black');
-		// document.getElementById('svg').appendChild(line);
-		var path = document.createElementNS(svgns, 'path');
-		var input = "M" + startingWidth + "," + (startingHeight + i * distanceNicks) + " L" + (startingWidth + (horizontalNicks-1)*distanceNicksH) + "," + (startingHeight + i * distanceNicks);
-		path.setAttributeNS(null, "d", input);
-		path.setAttribute("stroke", "black");
-		svg.appendChild(path);
+
+	// Holds x-coordinate of all horizontal nicks
+	var horizontal_nicks = [];
+	for(var i = 0; i <= verticalNicks; i++) {
+		var x_1 = startingWidth;
+		var y_1 = startingHeight + i * distanceNicks;
+		var x_2 = boardW + startingWidth;
+		var y_2 = startingHeight + i * distanceNicks;
+		createPath([x_1,y_1], [x_2,y_2], "black", "svg_board");
 		vertical_nicks.push(startingHeight + i * distanceNicks);
 	}
-	var horizontal_nicks = [];
-	for(var k = 0; k < horizontalNicks; k++) {
-		// var line = document.createElementNS(svgns, 'line');
-		// line.setAttributeNS(null, 'x1', startingWidth + k*distanceNicksH);
-		// line.setAttributeNS(null, 'y1', startingHeight);
-		// line.setAttributeNS(null, 'x2', startingWidth + k*distanceNicksH);
-		// line.setAttributeNS(null, 'y2', startingHeight + (verticalNicks-1)*distanceNicks + circleRadius);
-		// line.setAttributeNS(null,"stroke", "black")
-		// line.setAttribute('class', 'vertical');
-		// document.getElementById('svg').appendChild(line);
-		var path = document.createElementNS(svgns, 'path');
-		var input = "M" + (startingWidth + k * distanceNicksH) + "," + startingHeight + " L" + (startingWidth + k * distanceNicksH) + "," + (startingHeight + (verticalNicks-1)*distanceNicks);
-		path.setAttributeNS(null, "d", input);
-		path.setAttribute("stroke", "black");
-		svg.appendChild(path);
+	for(var k = 0; k <= horizontalNicks; k++) {
+		var x_1 = startingWidth + k * distanceNicksH;
+		var y_1 = startingHeight;
+		var x_2 = startingWidth + k * distanceNicksH
+		var y_2 = startingHeight + boardH;
+		createPath([x_1,y_1], [x_2,y_2], "black", "svg_board");
 		horizontal_nicks.push(startingWidth + k*distanceNicksH);
 	}
-	vertical_nicks.sort();
-	horizontal_nicks.sort();
 
-	for(var i = 0; i < verticalNicks; i++) {
-		for(var k = 0; k < horizontalNicks; k++) {
-			var circle = document.createElementNS(svgns, 'circle');
-			circle.setAttributeNS(null, 'cx', startingWidth + k*distanceNicksH);
-			circle.setAttributeNS(null, 'cy', startingHeight + i*distanceNicks);
-			circle.setAttributeNS(null, 'r', circleRadius);
-			circle.setAttribute("visibility", "hidden");
-			circle.setAttribute("class", "hidden_circle");
-			document.getElementById('svg').appendChild(circle);
-			if(i >= 5 && i <= verticalNicks-6) {
+
+	// Create boxes and circles on board
+	for(var i = 0; i <= verticalNicks; i++) {
+		for(var k = 0; k <= horizontalNicks; k++) {
+			if(i >= 5 && i <= verticalNicks-5) { 
+			// The middle three rows have no rectangles or circles
 				continue;
-			}			
-			if((i % 2 == 1 && k % 2 == 1) || (i == 2 && k == 2) || (i == verticalNicks-3 && k == horizontalNicks-3)) {
+			}	
+			if((i % 2 == 1 && k % 2 == 1) || (i == 2 && k == 2) || (i == verticalNicks - 2 && k == horizontalNicks - 2)) {
+				// Create circles -- "Safe zones"
 				var circle = document.createElementNS(svgns, 'circle');
 				circle.setAttributeNS(null, 'cx', startingWidth + k*distanceNicksH);
 				circle.setAttributeNS(null, 'cy', startingHeight + i*distanceNicks);
@@ -101,10 +88,11 @@
 				circle.style.fill = 'white';
 				circle.style.stroke = "black";
 				circle.style.strokeWidth = 1;
-				document.getElementById('svg').appendChild(circle);
+				document.getElementById('svg_board').appendChild(circle);
 
 			}
 			else {
+				// Otherwise, create rectangles
 				var rect = document.createElementNS(svgns, "rect");
 				rect.setAttributeNS(null,'x',startingWidth+k*distanceNicksH - circleRadius*2);
 				rect.setAttributeNS(null, 'y', startingHeight + i*distanceNicks - circleRadius);
@@ -113,7 +101,7 @@
 				rect.style.fill = "white";
 				rect.style.stroke = 'black';
 				rect.style.strokeWidth = 1;
-				document.getElementById('svg').appendChild(rect);
+				document.getElementById('svg_board').appendChild(rect);
 			}
 		}
 	}
@@ -123,14 +111,17 @@
 	circle.setAttributeNS(null, 'cy', startingHeight);
 	circle.setAttributeNS(null, 'r', circleRadius);
 	circle.setAttributeNS(null,"id", "c");
+	circle.setAttribute("class", "not_selected");
 	circle.onclick = function(e) {
+		console.log("selected");
 		e.stopImmediatePropagation();
-		this.setAttribute("class", "selected");
+		if(this.getAttribute("class") == "selected") {
+			this.setAttribute("class", "not_selected");
+		}
+		else this.setAttribute("class", "selected");
 	}
-	svg.appendChild(circle);
-	svg.onclick = function() {
-		console.log(event.clientX);
-		console.log(event.clientY);
+	svg_board.appendChild(circle);
+	svg_board.onclick = function() {
 		var circle_arr = document.getElementsByClassName("selected");
 		if(circle_arr.length == 0) {
 			console.log("here3");
@@ -138,26 +129,30 @@
 		}
 		var circle = circle_arr[0];
 		console.log(circle);
-		var distance_x = event.clientX - circle.getAttribute("cx");
-		var distance_y = event.clientX - circle.getAttribute("cy");
-		var closest_x = findClosest(event.clientX, horizontal_nicks);
-		var closest_y = findClosest(event.clientY, vertical_nicks);
+		var curr_x = circle.getAttribute("cx");
+		var curr_y = circle.getAttribute("cy");
+		var svg_rect = svg_board.getBoundingClientRect();
+		var closest_x = findClosest(event.clientX-svg_rect.left, horizontal_nicks);
+		var closest_y = findClosest(event.clientY-svg_rect.top, vertical_nicks);
 		console.log(closest_x);
 		console.log(closest_y);
-		if(closest_x[1] > distanceNicksH || closest_y[1] > distanceNicks) {
+
+		
+		if(Math.abs(curr_x - closest_x[0]) >= distanceNicksH*1.5 || Math.abs(curr_y - closest_y[0]) >= distanceNicks*1.5) {
 			console.log("here");
 			return;
 		}
 		if(closest_x[0] != circle.getAttribute("cx") && closest_y[0] != circle.getAttribute("cy")){
 			console.log("here1");
 			return;
-
 		} 
+
 		if(closest_x[0] == circle.getAttribute("cx")) {
 			circle.setAttributeNS(null,"cy", closest_y[0]);
 			console.log("hihi");
 
 		}
+
 		else {
 			circle.setAttributeNS(null,"cx", closest_x[0]);
 			console.log('heldsa');
@@ -165,10 +160,28 @@
 		circle.setAttribute("class", "not_selected");
 	}
 
+	// Create small rectangle on side
+	var svg_right = document.getElementById("svg_right");
+	var svg_board_dim = svg_board.getBoundingClientRect();
+	svg_right.setAttribute("width", window.innerWidth - svg_board_dim.right - 2 * circleRadius);
+	svg_right.setAttribute("height", boardH);
+	svg_right.setAttribute("x", window.innerWidth - svg_board_dim.left+4);
 
+	// var right_rect = document.createElementNS(svgns, 'rect');
+	// var right_width = window.innerWidth - svg_board_dim.right - 4 * circleRadius;
+	// right_rect.setAttributeNS(null, 'x', svg_board_dim.right + circleRadius*2);
+	// right_rect.setAttributeNS(null, 'y', svg_board_dim.top);
+	// right_rect.setAttributeNS(null, 'width', right_width);
+	// right_rect.setAttributeNS(null, 'height', boardH);
 
+	var svg_left = document.getElementById("svg_left");
+	svg_left.setAttribute("width", window.innerWidth - svg_board_dim.right - 2 * circleRadius);
+	svg_left.setAttribute("height", boardH);
+	blue_circle_img = [];
+	right_circle = [];
 
 </script>
+
 </body>
 
 
