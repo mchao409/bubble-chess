@@ -44,7 +44,7 @@ var y_location_horizontal_lines = [];
 var x_location_vertical_lines = [];
 
 // Create the horizontal and vertical lines
-for(var i = 0; i <= board_height + 1; i += horizontal_lines_separation) {
+for(var i = 0; i <= board_height+1; i += horizontal_lines_separation) {
 	var x_1 = board_left_x;
 	var y_1 = board_upper_y + i;
 	var x_2 = board_width + board_left_x;
@@ -52,7 +52,7 @@ for(var i = 0; i <= board_height + 1; i += horizontal_lines_separation) {
 	createPath([x_1,y_1], [x_2,y_2], "black", "svg_board");
 	y_location_horizontal_lines.push(y_1);
 }
-for(var k = 0; k <= board_width + 1; k += vertical_lines_separation) {
+for(var k = 0; k <= board_width+1; k += vertical_lines_separation) {
 	var x_1 = board_left_x + k;
 	var y_1 = board_upper_y;
 	var x_2 = x_1;
@@ -61,11 +61,10 @@ for(var k = 0; k <= board_width + 1; k += vertical_lines_separation) {
 	x_location_vertical_lines.push(x_1);
 }
 
-
 // Create boxes and circles on board
-for(var i = 0; i <= num_horizontal_lines; i++) {
-	for(var k = 0; k <= num_vertical_lines; k++) {
-		if(i >= 5 && i <= num_horizontal_lines-5) { 
+for(var i = 0; i < num_horizontal_lines; i++) {
+	for(var k = 0; k < num_vertical_lines; k++) {
+		if(i >= 5 && i <= num_horizontal_lines-6) { 
 		// The middle three rows have no rectangles or circles
 			continue;
 		}	
