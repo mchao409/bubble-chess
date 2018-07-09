@@ -1,5 +1,6 @@
+// Functions to create SVG path, circle, and rectangle elements
+
 svgns = "http://www.w3.org/2000/svg";
-svg_board = document.getElementById("svg_board");
 
 function createPath(point_1, point_2, color, svg_name) {
 	var path = document.createElementNS(svgns, "path");

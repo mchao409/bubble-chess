@@ -4,176 +4,175 @@
 <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="index.css">
 <body>
-		<svg id = "svg_left"></svg>
-		<svg id="svg_board"></svg>
+	<svg id = "svg_left"></svg>
+	<svg id="svg_board"></svg>
+	<svg id= "svg_right"></svg>
 
-		<svg id= "svg_right"></svg>
-
-<script src="boardDrawing.js", type="text/javascript"> </script>
+<script src="svg_element_creator.js", type="text/javascript"> </script>
+<script src="board_drawing.js" type="text/javascript"></script>
 <script>
-	function findClosest(num, arr) {
-		// Returns size 2 array, first element is closest element, second element is difference between num and the closest element
-		var currClosest = arr[0];
-		var currDiff = Math.abs(num-currClosest);
-		for(var i = 0; i < arr.length; i++) {
-			if(Math.abs(arr[i]-num) < currDiff) {
-				currDiff = Math.abs(arr[i]-num);
-				currClosest = arr[i];
-			}
-		}
-		return[currClosest, currDiff];
-	}
+	// function findClosest(num, arr) {
+	// 	// Returns size 2 array, first element is closest element, second element is difference between num and the closest element
+	// 	var currClosest = arr[0];
+	// 	var currDiff = Math.abs(num-currClosest);
+	// 	for(var i = 0; i < arr.length; i++) {
+	// 		if(Math.abs(arr[i]-num) < currDiff) {
+	// 			currDiff = Math.abs(arr[i]-num);
+	// 			currClosest = arr[i];
+	// 		}
+	// 	}
+	// 	return[currClosest, currDiff];
+	// }
 	// Make the board 
-	var svgns = "http://www.w3.org/2000/svg";
-	var margin = 0.15;
-	var marginW = 0.3;
-	var verticalNicks = 12;
-	var horizontalNicks = 4;
+	// var svgns = "http://www.w3.org/2000/svg";
+	// var margin = 0.15;
+	// var marginW = 0.3;
+	// var verticalNicks = 12;
+	// var horizontalNicks = 4;
 
-	var startingHeight = window.innerHeight * margin;
-	var boardH = window.innerHeight - 2 * startingHeight;
-	var distanceNicks = boardH*1.0/verticalNicks;
+	// var startingHeight = window.innerHeight * margin;
+	// var boardH = window.innerHeight - 2 * startingHeight;
+	// var distanceNicks = boardH*1.0/verticalNicks;
 
-	var startingWidth = window.innerWidth * marginW;
-	var boardW = window.innerWidth - 2 * window.innerWidth * marginW;
-	var distanceNicksH = boardW*1.0/horizontalNicks;
-	var circleRadius = Math.floor(distanceNicks/2.0) - 3;
-	startingWidth = circleRadius * 2 + 2;
-	startingHeight = circleRadius * 2 + 2;
+	// var startingWidth = window.innerWidth * marginW;
+	// var boardW = window.innerWidth - 2 * window.innerWidth * marginW;
+	// var distanceNicksH = boardW*1.0/horizontalNicks;
+	// var circleRadius = Math.floor(distanceNicks/2.0) - 3;
+	// startingWidth = circleRadius * 2 + 2;
+	// startingHeight = circleRadius * 2 + 2;
 
-	var svg_board = document.getElementById('svg_board');
-	svg_board.setAttribute("width", boardW + 4 * circleRadius+3);
-	svg_board.setAttribute("height", boardH + 4 * circleRadius + 3);
-
-
-	// Create circles, rectangles, lines
-
-	// Holds y-coordinate of all vertical nicks
-	var vertical_nicks = [];
-
-	// Holds x-coordinate of all horizontal nicks
-	var horizontal_nicks = [];
-
-	// Create the horizontal and vertical lines
-	for(var i = 0; i <= boardH + 1; i += distanceNicks) {
-		var x_1 = startingWidth;
-		var y_1 = startingHeight + i;
-		var x_2 = boardW + startingWidth;
-		var y_2 = y_1;
-		createPath([x_1,y_1], [x_2,y_2], "black", "svg_board");
-		vertical_nicks.push(y_1);
-	}
-	for(var k = 0; k <= boardW + 1; k += distanceNicksH) {
-		var x_1 = startingWidth + k;
-		var y_1 = startingHeight;
-		var x_2 = x_1;
-		var y_2 = startingHeight + boardH;
-		createPath([x_1,y_1], [x_2,y_2], "black", "svg_board");
-		horizontal_nicks.push(x_1);
-	}
+	// var svg_board = document.getElementById('svg_board');
+	// svg_board.setAttribute("width", boardW + 4 * circleRadius+3);
+	// svg_board.setAttribute("height", boardH + 4 * circleRadius + 3);
 
 
-	// Create boxes and circles on board
-	for(var i = 0; i <= verticalNicks; i++) {
-		for(var k = 0; k <= horizontalNicks; k++) {
-			if(i >= 5 && i <= verticalNicks-5) { 
-			// The middle three rows have no rectangles or circles
-				continue;
-			}	
-			if((i % 2 == 1 && k % 2 == 1) || (i == 2 && k == 2) || (i == verticalNicks - 2 && k == horizontalNicks - 2)) {
-				// Create circles -- "Safe zones"
-				console.log("hi");
-				var circle = document.createElementNS(svgns, 'circle');
-				var cx = startingWidth + k * distanceNicksH;
-				var cy = startingWidth + i * distanceNicks;
-				createCircle(cx, cy, circleRadius, "white", "black", "svg_board");
+	// // Create circles, rectangles, lines
 
-			}
-			else {
-				// Otherwise, create rectangles
-				var x = startingWidth + k * distanceNicksH - circleRadius * 2;
-				var y = startingHeight + i * distanceNicks - circleRadius;
-				var height = circleRadius * 2;
-				var width = circleRadius * 4;
-				createRectangle(x,y,width,height,"white", "black", "svg_board");
-			}
-		}
-	}
+	// // Holds y-coordinate of all vertical nicks
+	// var vertical_nicks = [];
 
-	var circle = document.createElementNS(svgns,'circle');
-	circle.setAttributeNS(null, 'cx', startingWidth);
-	circle.setAttributeNS(null, 'cy', startingHeight);
-	circle.setAttributeNS(null, 'r', circleRadius);
-	circle.setAttributeNS(null,"id", "c");
-	circle.setAttribute("class", "not_selected");
-	circle.onclick = function(e) {
-		console.log("selected");
-		e.stopImmediatePropagation();
-		if(this.getAttribute("class") == "selected") {
-			this.setAttribute("class", "not_selected");
-		}
-		else this.setAttribute("class", "selected");
-	}
-	svg_board.appendChild(circle);
-	svg_board.onclick = function() {
-		var circle_arr = document.getElementsByClassName("selected");
-		if(circle_arr.length == 0) {
-			console.log("here3");
-			return;
-		}
-		var circle = circle_arr[0];
-		console.log(circle);
-		var curr_x = circle.getAttribute("cx");
-		var curr_y = circle.getAttribute("cy");
-		var svg_rect = svg_board.getBoundingClientRect();
-		var closest_x = findClosest(event.clientX-svg_rect.left, horizontal_nicks);
-		var closest_y = findClosest(event.clientY-svg_rect.top, vertical_nicks);
-		console.log(closest_x);
-		console.log(closest_y);
+	// // Holds x-coordinate of all horizontal nicks
+	// var horizontal_nicks = [];
+
+	// // Create the horizontal and vertical lines
+	// for(var i = 0; i <= boardH + 1; i += distanceNicks) {
+	// 	var x_1 = startingWidth;
+	// 	var y_1 = startingHeight + i;
+	// 	var x_2 = boardW + startingWidth;
+	// 	var y_2 = y_1;
+	// 	createPath([x_1,y_1], [x_2,y_2], "black", "svg_board");
+	// 	vertical_nicks.push(y_1);
+	// }
+	// for(var k = 0; k <= boardW + 1; k += distanceNicksH) {
+	// 	var x_1 = startingWidth + k;
+	// 	var y_1 = startingHeight;
+	// 	var x_2 = x_1;
+	// 	var y_2 = startingHeight + boardH;
+	// 	createPath([x_1,y_1], [x_2,y_2], "black", "svg_board");
+	// 	horizontal_nicks.push(x_1);
+	// }
+
+
+	// // Create boxes and circles on board
+	// for(var i = 0; i <= verticalNicks; i++) {
+	// 	for(var k = 0; k <= horizontalNicks; k++) {
+	// 		if(i >= 5 && i <= verticalNicks-5) { 
+	// 		// The middle three rows have no rectangles or circles
+	// 			continue;
+	// 		}	
+	// 		if((i % 2 == 1 && k % 2 == 1) || (i == 2 && k == 2) || (i == verticalNicks - 2 && k == horizontalNicks - 2)) {
+	// 			// Create circles -- "Safe zones"
+	// 			var circle = document.createElementNS(svgns, 'circle');
+	// 			var cx = startingWidth + k * distanceNicksH;
+	// 			var cy = startingWidth + i * distanceNicks;
+	// 			createCircle(cx, cy, circleRadius, "white", "black", "svg_board");
+
+	// 		}
+	// 		else {
+	// 			// Otherwise, create rectangles
+	// 			var x = startingWidth + k * distanceNicksH - circleRadius * 2;
+	// 			var y = startingHeight + i * distanceNicks - circleRadius;
+	// 			var height = circleRadius * 2;
+	// 			var width = circleRadius * 4;
+	// 			createRectangle(x,y,width,height,"white", "black", "svg_board");
+	// 		}
+	// 	}
+	// }
+
+	// var circle = document.createElementNS(svgns,'circle');
+	// circle.setAttributeNS(null, 'cx', startingWidth);
+	// circle.setAttributeNS(null, 'cy', startingHeight);
+	// circle.setAttributeNS(null, 'r', circleRadius);
+	// circle.setAttributeNS(null,"id", "c");
+	// circle.setAttribute("class", "not_selected");
+	// circle.onclick = function(e) {
+	// 	console.log("selected");
+	// 	e.stopImmediatePropagation();
+	// 	if(this.getAttribute("class") == "selected") {
+	// 		this.setAttribute("class", "not_selected");
+	// 	}
+	// 	else this.setAttribute("class", "selected");
+	// }
+
+
+	// // Create small rectangle on side
+	// var svg_right = document.getElementById("svg_right");
+	// var svg_board_dim = svg_board.getBoundingClientRect();
+	// svg_right.setAttribute("width", window.innerWidth - svg_board_dim.right - 2 * circleRadius);
+	// svg_right.setAttribute("height", boardH);
+	// svg_right.setAttribute("x", window.innerWidth - svg_board_dim.left+4);
+
+	// // var right_rect = document.createElementNS(svgns, 'rect');
+	// // var right_width = window.innerWidth - svg_board_dim.right - 4 * circleRadius;
+	// // right_rect.setAttributeNS(null, 'x', svg_board_dim.right + circleRadius*2);
+	// // right_rect.setAttributeNS(null, 'y', svg_board_dim.top);
+	// // right_rect.setAttributeNS(null, 'width', right_width);
+	// // right_rect.setAttributeNS(null, 'height', boardH);
+
+	// var svg_left = document.getElementById("svg_left");
+	// svg_left.setAttribute("width", window.innerWidth - svg_board_dim.right - 2 * circleRadius);
+	// svg_left.setAttribute("height", boardH);
+	// blue_circle_img = [];
+	// right_circle = [];
+	// svg_board.appendChild(circle);
+	// svg_board.onclick = function() {
+	// 	var circle_arr = document.getElementsByClassName("selected");
+	// 	if(circle_arr.length == 0) {
+	// 		console.log("here3");
+	// 		return;
+	// 	}
+	// 	var circle = circle_arr[0];
+	// 	console.log(circle);
+	// 	var curr_x = circle.getAttribute("cx");
+	// 	var curr_y = circle.getAttribute("cy");
+	// 	var svg_rect = svg_board.getBoundingClientRect();
+	// 	var closest_x = findClosest(event.clientX-svg_rect.left, horizontal_nicks);
+	// 	var closest_y = findClosest(event.clientY-svg_rect.top, vertical_nicks);
+	// 	console.log(closest_x);
+	// 	console.log(closest_y);
 
 		
-		if(Math.abs(curr_x - closest_x[0]) >= distanceNicksH*1.5 || Math.abs(curr_y - closest_y[0]) >= distanceNicks*1.5) {
-			console.log("here");
-			return;
-		}
-		if(closest_x[0] != circle.getAttribute("cx") && closest_y[0] != circle.getAttribute("cy")){
-			console.log("here1");
-			return;
-		} 
+	// 	if(Math.abs(curr_x - closest_x[0]) >= distanceNicksH*1.5 || Math.abs(curr_y - closest_y[0]) >= distanceNicks*1.5) {
+	// 		console.log("here");
+	// 		return;
+	// 	}
+	// 	if(closest_x[0] != circle.getAttribute("cx") && closest_y[0] != circle.getAttribute("cy")){
+	// 		console.log("here1");
+	// 		return;
+	// 	} 
 
-		if(closest_x[0] == circle.getAttribute("cx")) {
-			circle.setAttributeNS(null,"cy", closest_y[0]);
-			console.log("hihi");
+	// 	if(closest_x[0] == circle.getAttribute("cx")) {
+	// 		circle.setAttributeNS(null,"cy", closest_y[0]);
+	// 		console.log("hihi");
 
-		}
+	// 	}
 
-		else {
-			circle.setAttributeNS(null,"cx", closest_x[0]);
-			console.log('heldsa');
-		}
-		circle.setAttribute("class", "not_selected");
-	}
-
-	// Create small rectangle on side
-	var svg_right = document.getElementById("svg_right");
-	var svg_board_dim = svg_board.getBoundingClientRect();
-	svg_right.setAttribute("width", window.innerWidth - svg_board_dim.right - 2 * circleRadius);
-	svg_right.setAttribute("height", boardH);
-	svg_right.setAttribute("x", window.innerWidth - svg_board_dim.left+4);
-
-	// var right_rect = document.createElementNS(svgns, 'rect');
-	// var right_width = window.innerWidth - svg_board_dim.right - 4 * circleRadius;
-	// right_rect.setAttributeNS(null, 'x', svg_board_dim.right + circleRadius*2);
-	// right_rect.setAttributeNS(null, 'y', svg_board_dim.top);
-	// right_rect.setAttributeNS(null, 'width', right_width);
-	// right_rect.setAttributeNS(null, 'height', boardH);
-
-	var svg_left = document.getElementById("svg_left");
-	svg_left.setAttribute("width", window.innerWidth - svg_board_dim.right - 2 * circleRadius);
-	svg_left.setAttribute("height", boardH);
-	blue_circle_img = [];
-	right_circle = [];
-
+	// 	else {
+	// 		circle.setAttributeNS(null,"cx", closest_x[0]);
+	// 		console.log('heldsa');
+	// 	}
+	// 	circle.setAttribute("class", "not_selected");
+	// }
 </script>
 
 </body>
