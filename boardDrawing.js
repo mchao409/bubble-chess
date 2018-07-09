@@ -10,15 +10,26 @@ function createPath(point_1, point_2, color, svg_name) {
 	document.getElementById(svg_name).appendChild(path);
 }
 
-function createRectangle(x,y,width,height,svg_name) {
-	var rect = document.createElementNS(svgns, "rect");
-
+function createCircle(cx, cy, radius, color, stroke, svg_name) {
+	circle.setAttributeNS(null, 'cx', cx);
+	circle.setAttributeNS(null, 'cy', cy);
+	circle.setAttributeNS(null, 'r', radius);
+	circle.style.fill = color;
+	circle.style.stroke = stroke;
+	circle.style.strokeWidth = 1;
+	document.getElementById(svg_name).appendChild(circle);
 }
 
-function createCircle(cx, cy, radius, color, stroke) {
-	var circle = document.createElementNS(svgns, "circle");
-	circle.setAttributeNS(null, "cx", cx);
-
+function createRectangle(x,y,width,height,fill, stroke,svg_name) {
+	var rect = document.createElementNS(svgns, 'rect');
+	rect.setAttributeNS(null,'x', x);
+	rect.setAttributeNS(null, 'y', y);
+	rect.setAttributeNS(null, 'height', height);
+	rect.setAttributeNS(null,'width', width);
+	rect.style.fill = fill;
+	rect.style.stroke = stroke;
+	rect.style.strokeWidth = 1;
+	document.getElementById(svg_name).appendChild(rect);
 }
 
 
