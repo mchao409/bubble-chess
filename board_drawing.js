@@ -44,22 +44,26 @@ var y_location_horizontal_lines = [];
 var x_location_vertical_lines = [];
 
 // Create the horizontal and vertical lines
+
 for(var i = 0; i <= board_height+1; i += horizontal_lines_separation) {
 	var x_1 = board_left_x;
 	var y_1 = board_upper_y + i;
 	var x_2 = board_width + board_left_x;
 	var y_2 = y_1;
-	createPath([x_1,y_1], [x_2,y_2], "black", "svg_board");
+	createPath([x_1,y_1], [x_2,y_2], "svg_board", "board_path");
 	y_location_horizontal_lines.push(y_1);
 }
+
 for(var k = 0; k <= board_width+1; k += vertical_lines_separation) {
 	var x_1 = board_left_x + k;
 	var y_1 = board_upper_y;
 	var x_2 = x_1;
 	var y_2 = board_upper_y + board_height;
-	createPath([x_1,y_1], [x_2,y_2], "black", "svg_board");
+	createPath([x_1,y_1], [x_2,y_2], "svg_board", "board_path");
 	x_location_vertical_lines.push(x_1);
 }
+console.log(y_location_horizontal_lines);
+console.log(x_location_vertical_lines);
 
 // Create boxes and circles on board
 for(var i = 0; i < num_horizontal_lines; i++) {
@@ -68,24 +72,25 @@ for(var i = 0; i < num_horizontal_lines; i++) {
 		// The middle three rows have no rectangles or circles
 			continue;
 		}	
+
 		if((i % 2 == 1 && k % 2 == 1) || (i == 2 && k == 2) || (i == num_horizontal_lines - 2 && k == num_vertical_lines - 2)) {
 			// Create circles -- "Safe zones"
-			var circle = document.createElementNS(svgns, 'circle');
 			var cx = board_left_x + k * vertical_lines_separation;
 			var cy = board_upper_y + i * horizontal_lines_separation;
-			createCircle(cx, cy, circle_radius, "white", "black", "svg_board");
-
+			createCircle(cx, cy, circle_radius,"svg_board", "board_circle");
 		}
+
 		else {
 			// Otherwise, create rectangles
 			var x = board_left_x + k * vertical_lines_separation - circle_radius * 2;
 			var y = board_upper_y + i * horizontal_lines_separation - circle_radius;
 			var height = circle_radius * 2;
 			var width = circle_radius * 4;
-			createRectangle(x,y,width,height,"white", "black", "svg_board");
+			createRectangle(x,y,width,height,"svg_board", "board_rect");
 		}
 	}
 }
+
 var circle = document.createElementNS(svgns,'circle');
 circle.setAttributeNS(null, 'cx', board_left_x);
 circle.setAttributeNS(null, 'cy', board_upper_y);
@@ -95,20 +100,23 @@ circle.setAttribute("class", "not_selected");
 circle.onclick = function(e) {
 	console.log("selected");
 	e.stopImmediatePropagation();
+
 	if(this.getAttribute("class") == "selected") {
 		this.setAttribute("class", "not_selected");
 	}
+
 	else this.setAttribute("class", "selected");
 }
-
 
 svg_board.appendChild(circle);
 svg_board.onclick = function() {
 	var circle_arr = document.getElementsByClassName("selected");
+
 	if(circle_arr.length == 0) {
 		console.log("here3");
 		return;
 	}
+
 	var circle = circle_arr[0];
 	console.log(circle);
 	var curr_x = circle.getAttribute("cx");
@@ -116,14 +124,12 @@ svg_board.onclick = function() {
 	var svg_rect = svg_board.getBoundingClientRect();
 	var closest_x = findClosest(event.clientX-svg_rect.left, x_location_vertical_lines);
 	var closest_y = findClosest(event.clientY-svg_rect.top, y_location_horizontal_lines);
-	console.log(closest_x);
-	console.log(closest_y);
 
-		
 	if(Math.abs(curr_x - closest_x[0]) >= vertical_lines_separation*1.5 || Math.abs(curr_y - closest_y[0]) >= horizontal_lines_separation*1.5) {
 		console.log("here");
 		return;
 	}
+
 	if(closest_x[0] != circle.getAttribute("cx") && closest_y[0] != circle.getAttribute("cy")){
 		console.log("here1");
 		return;
@@ -132,13 +138,13 @@ svg_board.onclick = function() {
 	if(closest_x[0] == circle.getAttribute("cx")) {
 		circle.setAttributeNS(null,"cy", closest_y[0]);
 		console.log("hihi");
-
 	}
 
 	else {
 		circle.setAttributeNS(null,"cx", closest_x[0]);
 		console.log('heldsa');
 	}
+
 	circle.setAttribute("class", "not_selected");
 }
 
