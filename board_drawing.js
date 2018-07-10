@@ -1,4 +1,5 @@
 // Creates the board using SVG path, rectangle, and circle elements
+
 svgns = "http://www.w3.org/2000/svg";
 
 function findClosest(num, arr) {
@@ -16,7 +17,6 @@ function findClosest(num, arr) {
 	return[currClosest, currDiff];
 }
 
-var svgns = "http://www.w3.org/2000/svg";
 var margin_vertical = 0.15;
 var margin_side = 0.3;
 
@@ -89,63 +89,6 @@ for(var i = 0; i < num_horizontal_lines; i++) {
 			createRectangle(x,y,width,height,"svg_board", "board_rect");
 		}
 	}
-}
-
-var circle = document.createElementNS(svgns,'circle');
-circle.setAttributeNS(null, 'cx', board_left_x);
-circle.setAttributeNS(null, 'cy', board_upper_y);
-circle.setAttributeNS(null, 'r', circle_radius);
-circle.setAttributeNS(null,"id", "c");
-circle.setAttribute("class", "not_selected");
-circle.onclick = function(e) {
-	console.log("selected");
-	e.stopImmediatePropagation();
-
-	if(this.getAttribute("class") == "selected") {
-		this.setAttribute("class", "not_selected");
-	}
-
-	else this.setAttribute("class", "selected");
-}
-
-svg_board.appendChild(circle);
-svg_board.onclick = function() {
-	var circle_arr = document.getElementsByClassName("selected");
-
-	if(circle_arr.length == 0) {
-		console.log("here3");
-		return;
-	}
-
-	var circle = circle_arr[0];
-	console.log(circle);
-	var curr_x = circle.getAttribute("cx");
-	var curr_y = circle.getAttribute("cy");
-	var svg_rect = svg_board.getBoundingClientRect();
-	var closest_x = findClosest(event.clientX-svg_rect.left, x_location_vertical_lines);
-	var closest_y = findClosest(event.clientY-svg_rect.top, y_location_horizontal_lines);
-
-	if(Math.abs(curr_x - closest_x[0]) >= vertical_lines_separation*1.5 || Math.abs(curr_y - closest_y[0]) >= horizontal_lines_separation*1.5) {
-		console.log("here");
-		return;
-	}
-
-	if(closest_x[0] != circle.getAttribute("cx") && closest_y[0] != circle.getAttribute("cy")){
-		console.log("here1");
-		return;
-	} 
-
-	if(closest_x[0] == circle.getAttribute("cx")) {
-		circle.setAttributeNS(null,"cy", closest_y[0]);
-		console.log("hihi");
-	}
-
-	else {
-		circle.setAttributeNS(null,"cx", closest_x[0]);
-		console.log('heldsa');
-	}
-
-	circle.setAttribute("class", "not_selected");
 }
 
 
