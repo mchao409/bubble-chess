@@ -2,20 +2,7 @@
 
 svgns = "http://www.w3.org/2000/svg";
 
-function findClosest(num, arr) {
-	// Finds the value in arr that is closest to num.
-	// Returns a size 2 array where the first element is the value
-	// 	and the second element is the difference between the value and num.
-	var currClosest = arr[0];
-	var currDiff = Math.abs(num-currClosest);
-	for(var i = 0; i < arr.length; i++) {
-		if(Math.abs(arr[i]-num) < currDiff) {
-			currDiff = Math.abs(arr[i]-num);
-			currClosest = arr[i];
-		}
-	}
-	return[currClosest, currDiff];
-}
+
 
 var margin_vertical = 0.15;
 var margin_side = 0.3;

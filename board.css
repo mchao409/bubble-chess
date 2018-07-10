@@ -19,3 +19,9 @@ body {
 .opponent_piece {
 	fill: blue;
 }
+
+
+.selected {
+	stroke: blue;
+	stroke-width: 3px;
+}
