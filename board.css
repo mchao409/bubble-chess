@@ -15,3 +15,7 @@ body {
 .board_path {
 	stroke: black;
 }
+
+.opponent_piece {
+	fill: blue;
+}
