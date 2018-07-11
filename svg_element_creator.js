@@ -42,7 +42,7 @@ function createRectangle(x,y,width,height,svg_id, class_name) {
 		.attr("y", y)
 		.attr("height", height)
 		.attr("width", width)
-		.attr("class", ckass_name)
+		.attr("class", class_name)
 	// var rect = document.createElementNS(svgns, 'rect');
 	// rect.setAttributeNS(null,'x', x);
 	// rect.setAttributeNS(null, 'y', y);
@@ -52,6 +52,52 @@ function createRectangle(x,y,width,height,svg_id, class_name) {
 	// document.getElementById(svg_id).appendChild(rect);
 	return rect;
 }
+
+// Creates a pattern background for the player's pieces
+function createPattern(circle, num_circle, svg_id) {
+	var svg = d3.select("#" + svg_id)
+	var defs = svg.append("svg:defs");
+	defs.append("svg:pattern")
+		.attr("id", "" + num_circle + "_circle")
+		.attr("width", 2 * circle_radius)
+		.attr("height", 2 * circle_radius)
+		// .attr("patternUnits", "userSpaceOnUse")
+		.append("svg:image")
+		.attr("xlink:href", "/img/blue/" + num_circle + "blue.png")
+		.attr("width", 2 * circle_radius)
+		.attr("height", 2 * circle_radius)
+		.attr("x", 0)
+		.attr("y", 0)
+	console.log(defs);
+
+	circle.style("fill", "black")
+		.style("fill", "url(#" + num_circle + "_circle)");
+	return circle;
+}
+// circle_radius = 11;
+// var body = d3.select("body");
+// var svg = d3.select("#svg_board");
+// var defs = svg.append("svg:defs");
+// defs.append("svg:pattern")
+// 	.attr("id", "testPattern")
+// 	.attr("width", 2 * circle_radius)
+// 	.attr("height", 2 * circle_radius)
+// 	// .attr("patternUnits", "userSpaceOnUse")
+// 	.append("svg:image")
+// 	.attr("xlink:href", "/img/blue/0blue.png")
+// 	.attr("width", 2 * circle_radius)
+// 	.attr("height", 2 * circle_radius)
+// 	.attr("x", 0)
+// 	.attr("y", 0)
+
+// var circle = svg.append("circle")
+// 	.attr("cx", 128)
+// 	.attr("cy", 100)
+// 	.attr("r", circle_radius)
+// 	.style("fill", "#fff")
+// 	.style("fill", "url(#testPattern)");
+
+
 
 
 

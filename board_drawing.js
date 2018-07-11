@@ -60,8 +60,9 @@ for(var i = 0; i < num_horizontal_lines; i++) {
 			continue;
 		}	
 
-		if((i % 2 == 1 && k % 2 == 1) || (i == 2 && k == 2) || (i == num_horizontal_lines - 2 && k == num_vertical_lines - 2)) {
+		if((i % 2 == 1 && k % 2 == 1) || (i == 2 && k == 2) || (i == 10 && k == 2)) {
 			// Create circles -- "Safe zones"
+			console.log("hi")
 			var cx = board_left_x + k * vertical_lines_separation;
 			var cy = board_upper_y + i * horizontal_lines_separation;
 			createCircle(cx, cy, circle_radius,"svg_board", "board_circle");

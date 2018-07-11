@@ -14,6 +14,10 @@ function findClosest(num, arr) {
 	}
 	return[currClosest, currDiff];
 }
+function playerPiecesLocationsToOpponentPieces() {
+	// Gets the coordinates of the current player and transforms them for the opponent's board
+
+}
 // Registering what to do when a piece is attempted to be moved
 svg_board = document.getElementById("svg_board");
 svg_board.onclick = function() {
@@ -72,32 +76,8 @@ svg_board.onclick = function() {
 }
 
 
-function playerPiecesLocationsToOpponentPieces() {
-	// Gets the coordinates of the current player and transforms them for the opponent's board
 
-}
 
-// var body = d3.select("body");
-// var svg = d3.select("#svg_board");
-// var defs = svg.append("svg:defs");
-// defs.append("svg:pattern")
-// 	.attr("id", "testPattern")
-// 	.attr("width", 2 * circle_radius)
-// 	.attr("height", 2 * circle_radius)
-// 	.attr("patternUnits", "userSpaceOnUse")
-// 	.append("svg:image")
-// 	.attr("xlink:href", "/img/blue/0blue.png")
-// 	.attr("width", 2 * circle_radius)
-// 	.attr("height", 2 * circle_radius)
-// 	.attr("x", 0)
-// 	.attr("y", 0)
-
-// var circle = svg.append("circle")
-// 	.attr("cx", circle_radius)
-// 	.attr("cy", circle_radius)
-// 	.attr("r", circle_radius)
-// 	.style("fill", "#fff")
-// 	.style("fill", "url(#testPattern)");
 
 
 // svgns = "http://www.w3.org/2000/svg";
