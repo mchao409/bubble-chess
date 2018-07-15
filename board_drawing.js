@@ -20,9 +20,9 @@ var circle_radius = Math.floor(horizontal_lines_separation/2.0) - 3;
 var board_left_x = circle_radius * 2 + 2;
 var board_upper_y = circle_radius * 2 + 2;
 
-var svg_board = document.getElementById('svg_board');
-svg_board.setAttribute("width", board_width + 4 * circle_radius + 3);
-svg_board.setAttribute("height", board_height + 4 * circle_radius + 3);
+var svg_board = d3.select('#svg_board');
+svg_board.attr("width", board_width + 4 * circle_radius + 3);
+svg_board.attr("height", board_height + 4 * circle_radius + 3);
 
 // Holds y-coordinates of all the horizontal lines
 var y_location_horizontal_lines = [];
@@ -78,6 +78,14 @@ for(var i = 0; i < num_horizontal_lines; i++) {
 		}
 	}
 }
+
+// SVG on the right for initially storing circles
+
+svg_right = d3.select("#svg_right")
+	.attr("height", board_height)
+	.attr("width", (window.innerWidth - board_width) / 2 - 100)
+
+
 
 
 

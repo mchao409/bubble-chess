@@ -2,24 +2,30 @@ body {
 	text-align: center;
 }
 
-.board_rect {
-	stroke: gray;
-	fill: white;
+body, .board_circle, .board_rect {
+	fill: #fffef7;
+	background-color: #fffef7;
 }
 
-.board_circle {
+.board_rect, .board_circle, .board_path {
 	stroke: gray;
-	fill: white;
 }
 
-.board_path {
-	stroke: black;
+#svg_board {
+	margin-top: 8%;
+}
+
+#svg_right {
+	margin-left: 30px;
+}
+
+#svg_left {
+	margin-right: 30px;
 }
 
 .opponent_piece {
-	fill: blue;
+	fill: #d45e1e;
 }
-
 
 .selected {
 	stroke: blue;
