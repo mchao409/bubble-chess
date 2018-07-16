@@ -9,6 +9,11 @@ body, .board_circle, .board_rect {
 
 .board_rect, .board_circle, .board_path {
 	stroke: gray;
+	stroke-width: 1px;
+}
+
+.player_piece {
+	fill:black;
 }
 
 #svg_board {

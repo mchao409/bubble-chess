@@ -1,4 +1,4 @@
-// Creates the chess pieces on the board -- temporary for testing
+// Creates the bubble pieces on the board
 
 // Create opponent pieces (blue)
 for(var i = 0; i < 5; i++) {
@@ -16,7 +16,6 @@ for(var i = 0; i < 5; i++) {
 }
 
 // Create player pieces, put them in the svg on the right
-
 var svg_right = d3.select("#svg_right");
 var num_circles_horizontal = Math.floor(svg_right.attr("width")/(circle_radius * 2 + 4));
 console.log(num_circles_horizontal);
@@ -25,14 +24,27 @@ var row_num = 0;
 
 while_loop:
 while(count <= 19) {
-	var cy = circle_radius + 2 * circle_radius * row_num + 2 * row_num;
+	var cy = circle_radius + 2 * circle_radius * row_num + 2 * row_num + 2;
 	for(var i = 0; i < num_circles_horizontal-1; i++) {
 		if(count >= 19) break while_loop;
-		var cx = circle_radius + 2 * circle_radius * i + 2 * i;
+		var cx = circle_radius + 2 * circle_radius * i + 2 * i + 2;
 		var circle = createCircle(cx,cy,circle_radius,"svg_right", "player_piece");
 		circle.classed("not_selected", true);
+		// circle.onclick = function(e) {
+		// createPattern(circle, count, "svg_right");
+		circle.on("click", function(){
+			console.log("hihi");
+			d3.event.stopPropagation();
+			if(this.classList.contains("selected")) {
+				this.classList.add("not_selected");
+				this.classList.remove("selected");
+			}
+			else {
+				this.classList.add("selected");
+				this.classList.remove("not_selected");
+			}
+		})
 		count++;
-		createPattern(circle, count, "svg_right");
 	}
 	row_num++;
 }
@@ -49,7 +61,7 @@ while(count <= 19) {
 // 			var cx = board_left_x + k * vertical_lines_separation;
 // 			var cy = board_upper_y + i * horizontal_lines_separation;
 // 			var circle = createCircle(cx, cy, circle_radius,"svg_board", "player_piece");
-// 			createPattern(circle, count, "svg_board");
+// 			// createPattern(circle, count, "svg_board");
 // 			circle.classed("not_selected", true);
 // 			// circle.classList.add("not_selected");
 // 			// circle.classList.add("not_selected");

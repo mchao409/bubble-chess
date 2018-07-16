@@ -16,7 +16,7 @@ var horizontal_lines_separation = board_height * 1.0/(num_horizontal_lines-1);
 var board_width = window.innerWidth - 2 * window.innerWidth * margin_side;
 var vertical_lines_separation = board_width * 1.0/(num_vertical_lines-1);
 var circle_radius = Math.floor(horizontal_lines_separation/2.0) - 3;
-
+console.log(circle_radius);
 var board_left_x = circle_radius * 2 + 2;
 var board_upper_y = circle_radius * 2 + 2;
 
@@ -31,7 +31,6 @@ var y_location_horizontal_lines = [];
 var x_location_vertical_lines = [];
 
 // Create the horizontal and vertical lines
-
 for(var i = 0; i <= board_height+1; i += horizontal_lines_separation) {
 	var x_1 = board_left_x;
 	var y_1 = board_upper_y + i;
@@ -49,8 +48,28 @@ for(var k = 0; k <= board_width+1; k += vertical_lines_separation) {
 	createPath([x_1,y_1], [x_2,y_2], "svg_board", "board_path");
 	x_location_vertical_lines.push(x_1);
 }
-console.log(y_location_horizontal_lines);
-console.log(x_location_vertical_lines);
+
+// Create the diagonal lines
+// for(var i = 0; i < x_location_vertical_lines.length-1; i++) {
+// 	for(var k = 0; k < y_location_horizontal_lines.length-1; k++) {
+// 		var x_1 = x_location_vertical_lines[i];
+// 		var x_2 = x_location_vertical_lines[i+1];
+// 		var y_1 = y_location_horizontal_lines[k];
+// 		var y_2 = y_location_horizontal_lines[k+1];
+// 		createPath([x_1,y_1], [x_2,y_2], "svg_board", "board_path");
+// 	}
+// }
+
+// for(var i = 0; i < x_location_vertical_lines.length-1; i++) {
+// 	for(var k = 1; k < y_location_horizontal_lines.length-1; k++) {
+// 		var x_1 = x_location_vertical_lines[i];
+// 		var x_2 = x_location_vertical_lines[i+1];
+// 		var y_1 = y_location_horizontal_lines[k];
+// 		var y_2 = y_location_horizontal_lines[k+1];
+// 		createPath([x_1,y_1], [x_2,y_2], "svg_board", "board_path");
+// 	}
+// }
+
 
 // Create boxes and circles on board
 for(var i = 0; i < num_horizontal_lines; i++) {
