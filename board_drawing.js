@@ -2,8 +2,6 @@
 
 svgns = "http://www.w3.org/2000/svg";
 
-
-
 var margin_vertical = 0.15;
 var margin_side = 0.3;
 
@@ -50,27 +48,29 @@ for(var k = 0; k <= board_width+1; k += vertical_lines_separation) {
 }
 
 // Create the diagonal lines
-// for(var i = 0; i < x_location_vertical_lines.length-1; i++) {
-// 	for(var k = 0; k < y_location_horizontal_lines.length-1; k++) {
-// 		var x_1 = x_location_vertical_lines[i];
-// 		var x_2 = x_location_vertical_lines[i+1];
-// 		var y_1 = y_location_horizontal_lines[k];
-// 		var y_2 = y_location_horizontal_lines[k+1];
-// 		createPath([x_1,y_1], [x_2,y_2], "svg_board", "board_path");
-// 	}
-// }
+for(var i = 0; i < x_location_vertical_lines.length-1; i++) {
+	for(var k = 0; k < y_location_horizontal_lines.length-1; k++) {
+		var x_1 = x_location_vertical_lines[i];
+		var x_2 = x_location_vertical_lines[i+1];
+		var y_1 = y_location_horizontal_lines[k];
+		var y_2 = y_location_horizontal_lines[k+1];
+		createPath([x_1,y_1], [x_2,y_2], "svg_board", "board_path");
+	}
+}
 
-// for(var i = 0; i < x_location_vertical_lines.length-1; i++) {
-// 	for(var k = 1; k < y_location_horizontal_lines.length-1; k++) {
-// 		var x_1 = x_location_vertical_lines[i];
-// 		var x_2 = x_location_vertical_lines[i+1];
-// 		var y_1 = y_location_horizontal_lines[k];
-// 		var y_2 = y_location_horizontal_lines[k+1];
-// 		createPath([x_1,y_1], [x_2,y_2], "svg_board", "board_path");
-// 	}
-// }
+for(var i = 0; i < x_location_vertical_lines.length-1; i++) {
+	for(var k = 1; k < y_location_horizontal_lines.length-1; k++) {
+		var x_1 = x_location_vertical_lines[i];
+		var x_2 = x_location_vertical_lines[i+1];
+		var y_1 = y_location_horizontal_lines[k];
+		var y_2 = y_location_horizontal_lines[k-1];
+		createPath([x_1,y_1], [x_2,y_2], "svg_board", "board_path");
+	}
+}
 
+// Contains all the safe zones 
 
+var safe_zones = [];
 // Create boxes and circles on board
 for(var i = 0; i < num_horizontal_lines; i++) {
 	for(var k = 0; k < num_vertical_lines; k++) {
@@ -85,6 +85,7 @@ for(var i = 0; i < num_horizontal_lines; i++) {
 			var cx = board_left_x + k * vertical_lines_separation;
 			var cy = board_upper_y + i * horizontal_lines_separation;
 			createCircle(cx, cy, circle_radius,"svg_board", "board_circle");
+			safe_zones.push([i,k]);
 		}
 
 		else {

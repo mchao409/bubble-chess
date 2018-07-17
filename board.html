@@ -4,6 +4,10 @@
 <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="board.css">
 <body>
+	<div id="header"> 
+		<h1> Bubble Chess </h1>
+		<button id="start_button" type="button"> Start New Game </button>
+	</div>
 	<svg id ="svg_left"></svg>
 	<svg id="svg_board"></svg>
 	<svg id= "svg_right"></svg>
@@ -12,6 +16,7 @@
 <script src="board_drawing.js" type="text/javascript"></script>
 <script src="board_piece_movement.js" type="text/javascript"></script>
 <script src="board_pieces.js" type="text/javascript"></script>
+<script src="set_up_player_pieces.js" type="text/javascript"></script>
 <script>
 	// function findClosest(num, arr) {
 	// 	// Returns size 2 array, first element is closest element, second element is difference between num and the closest element

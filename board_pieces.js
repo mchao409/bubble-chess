@@ -40,6 +40,7 @@ while(count <= 19) {
 				this.classList.remove("selected");
 			}
 			else {
+				if(document.getElementsByClassName("selected").length == 1) return;
 				this.classList.add("selected");
 				this.classList.remove("not_selected");
 			}
