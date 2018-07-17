@@ -26,7 +26,7 @@ while_loop:
 while(count <= 19) {
 	var cy = circle_radius + 2 * circle_radius * row_num + 2 * row_num + 2;
 	for(var i = 0; i < num_circles_horizontal-1; i++) {
-		if(count >= 19) break while_loop;
+		if(count > 19) break while_loop;
 		var cx = circle_radius + 2 * circle_radius * i + 2 * i + 2;
 		var circle = createCircle(cx,cy,circle_radius,"svg_right", "player_piece");
 		circle.classed("not_selected", true);

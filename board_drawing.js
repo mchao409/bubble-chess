@@ -85,7 +85,7 @@ for(var i = 0; i < num_horizontal_lines; i++) {
 			var cx = board_left_x + k * vertical_lines_separation;
 			var cy = board_upper_y + i * horizontal_lines_separation;
 			createCircle(cx, cy, circle_radius,"svg_board", "board_circle");
-			safe_zones.push([i,k]);
+			safe_zones.push([cx,cy]);
 		}
 
 		else {
@@ -98,6 +98,7 @@ for(var i = 0; i < num_horizontal_lines; i++) {
 		}
 	}
 }
+console.log(safe_zones)
 
 // SVG on the right for initially storing circles
 
