@@ -63,7 +63,7 @@ function createPattern(circle, num_circle, svg_id) {
 		.attr("height", 2 * circle_radius)
 		// .attr("patternUnits", "userSpaceOnUse")
 		.append("svg:image")
-		.attr("xlink:href", "/img/blue/" + num_circle + "blue.png")
+		.attr("xlink:href", "static/img/blue/" + num_circle + "blue.png")
 		.attr("width", 2 * circle_radius)
 		.attr("height", 2 * circle_radius)
 		.attr("x", 0)
