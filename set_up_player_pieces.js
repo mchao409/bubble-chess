@@ -1,4 +1,7 @@
-// Deals with moving the player's pieces from right_svg to board
+// Deals with beginning the game -- setting up the board with the pieces -- 
+//  moving the player's pieces from right_svg to board
+
+
 function set_up_board_pieces() {
     // console.log("hi");
     circle = d3.select(".selected");
@@ -10,12 +13,6 @@ function set_up_board_pieces() {
     var svg_rect = svg_board.getBoundingClientRect();
     var closest_x = findClosest(event.clientX-svg_rect.left, x_location_vertical_lines);
     var closest_y = findClosest(event.clientY-svg_rect.top, y_location_horizontal_lines);
-    // console.log(closest_x);
-    // console.log(event.clientX);
-    // console.log(vertical_lines_separation * 1.5);
-    // console.log(closest_y);
-    // console.log(event.clientY);
-    // console.log(horizontal_lines_separation * 1.5);
 
     if(Math.abs(event.clientX-svg_rect.left - closest_x[0]) >= vertical_lines_separation * 1.5 
         || Math.abs(event.clientY - svg_rect.top - closest_y[0]) >= horizontal_lines_separation * 1.5) {
@@ -41,9 +38,9 @@ function checkBoardValid() {
     var error = "";
     d3.selectAll(".player_piece")
         .each(function(d,i) {
-            console.log(Math.round(this.getAttribute("cx")));
-            console.log(Math.round(this.getAttribute("cy")));
-            if(board_upper_y + 8 * horizontal_lines_separation >= this.getAttribute("cy")) {
+            // console.log(Math.round(this.getAttribute("cx")));
+            // console.log(Math.round(this.getAttribute("cy")));
+            if(board_upper_y + 7 * horizontal_lines_separation >= this.getAttribute("cy")) {
                 console.log(this);
                 error = "out";
             }
@@ -63,7 +60,6 @@ function checkBoardValid() {
         alert("One or more pieces is in a safe zone. Please readjust your placements");
         return false;
     }
-
 }
 
 var svg_board = document.getElementById("svg_board");
@@ -72,6 +68,7 @@ svg_board.addEventListener("click", set_up_board_pieces);
 var button = document.getElementById("start_button");
 button.addEventListener("click", function() {
     var isValid = checkBoardValid();
+    if(isValid == false) return;
 });
 
 
