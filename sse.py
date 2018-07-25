@@ -80,15 +80,15 @@ def pleaseWait(player):
     print("This is other: " + str(player.other))
     player_other = player.other
     while player.other == None:
-        yield "data: " + json.dumps("Waiting for opponent to enter") + "\n\n"
+        yield "data: " + json.dumps({"message": "Waiting for opponent to enter", "can_start": False}) + "\n\n"
         gevent.sleep(0.2)
 
     while player.other.is_ready_to_start != True:
-        yield "data: " + json.dumps("Waiting for opponent to be ready") + "\n\n"
+        yield "data: " + json.dumps({"message": "Waiting for opponent to be ready", "can_start": False}) + "\n\n"
         gevent.sleep(0.2)
 
     print(str(player.user_id) + " is finished")
-    yield "data: " + json.dumps("Finished") + "\n\n"
+    yield "data: " + json.dumps({"message": "Finished", "can_start": True}) + "\n\n"
 
     # print(player.is_ready_to_start)
     # print(player.other_id)

@@ -11,8 +11,8 @@ function set_up_board_pieces() {
         return;
     }
     var svg_rect = svg_board.getBoundingClientRect();
-    var closest_x = findClosest(event.clientX-svg_rect.left, x_location_vertical_lines);
-    var closest_y = findClosest(event.clientY-svg_rect.top, y_location_horizontal_lines);
+    var closest_x = find_closest(event.clientX-svg_rect.left, x_location_vertical_lines);
+    var closest_y = find_closest(event.clientY-svg_rect.top, y_location_horizontal_lines);
 
     if(Math.abs(event.clientX-svg_rect.left - closest_x[0]) >= vertical_lines_separation * 1.5 
         || Math.abs(event.clientY - svg_rect.top - closest_y[0]) >= horizontal_lines_separation * 1.5) {
@@ -63,25 +63,7 @@ function checkBoardValid() {
 var svg_board = document.getElementById("svg_board");
 svg_board.addEventListener("click", set_up_board_pieces);
 console.log("I AM HERE");
-var button = document.getElementById("start_button");
-button.addEventListener("click", function() {
-    var isValid = checkBoardValid();
-    if(isValid == false) return;
-    function listen() {
-        var source = new EventSource("/start/?user_id=" + id);
-        console.log("HERHERERE")
-        var target = document.getElementById("messages");
-        source.onmessage = function(msg) {
-            target.innerHTML = msg.data + '<br>';
-            console.log("This is " + id)
-            console.log(msg.data)
-            if(msg.data == "\"Finished\""){
-                source.close();
-            }
-        }
-    }
-    listen();
-})
+
 
 
 
