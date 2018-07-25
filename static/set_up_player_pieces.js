@@ -1,7 +1,7 @@
 // Deals with beginning the game -- setting up the board with the pieces -- 
 //  moving the player's pieces from right_svg to board
 
-
+console.log("SET UP PLAYER PIECES")
 function set_up_board_pieces() {
     // console.log("hi");
     circle = d3.select(".selected");
@@ -19,7 +19,6 @@ function set_up_board_pieces() {
         console.log("here");
         return;
     }
-
     circle = document.getElementsByClassName("selected")[0];
     svg_board = document.getElementById("svg_board");
     var svg_right = document.getElementById("svg_right");
@@ -27,7 +26,6 @@ function set_up_board_pieces() {
         svg_right.removeChild(circle);
         svg_board.appendChild(circle);
     }
-
     circle.setAttribute("cx", closest_x[0]);
     circle.setAttribute("cy", closest_y[0]);
     circle.classList.remove("selected");
@@ -64,12 +62,26 @@ function checkBoardValid() {
 
 var svg_board = document.getElementById("svg_board");
 svg_board.addEventListener("click", set_up_board_pieces);
-
+console.log("I AM HERE");
 var button = document.getElementById("start_button");
 button.addEventListener("click", function() {
     var isValid = checkBoardValid();
     if(isValid == false) return;
-});
+    function listen() {
+        var source = new EventSource("/start/?user_id=" + id);
+        console.log("HERHERERE")
+        var target = document.getElementById("messages");
+        source.onmessage = function(msg) {
+            target.innerHTML = msg.data + '<br>';
+            console.log("This is " + id)
+            console.log(msg.data)
+            if(msg.data == "\"Finished\""){
+                source.close();
+            }
+        }
+    }
+    listen();
+})
 
 
 

@@ -68,7 +68,7 @@ function createPattern(circle, num_circle, svg_id) {
 		.attr("height", 2 * circle_radius)
 		.attr("x", 0)
 		.attr("y", 0)
-	console.log(defs);
+	// console.log(defs);
 
 	circle
 		.attr("id", num_circle + "")

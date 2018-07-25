@@ -55,3 +55,7 @@ h1 {
 	stroke: blue;
 	stroke-width: 3px;
 }
+
+#exit_form {
+	display: none;
+}
