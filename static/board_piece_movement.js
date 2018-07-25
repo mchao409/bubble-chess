@@ -32,13 +32,12 @@ function move_player_piece() {
 		  console.log("here3");
 		  return;
 	   }
-	   var curr_x = circle.attr("cx");
-	   var curr_y = circle.attr("cy");
+	   var curr_x = parseInt(circle.attr("cx"));
+	   var curr_y = parseInt(circle.attr("cy"));
 	   console.log(curr_x);
 	   var svg_rect = svg_board.getBoundingClientRect();
 
 	   var closest_x = find_closest(event.clientX-svg_rect.left, x_location_vertical_lines);
-
 	   var closest_y = find_closest(event.clientY-svg_rect.top, y_location_horizontal_lines);
 
 	   // Make sure that the piece can only move one space, not multiple
@@ -50,11 +49,15 @@ function move_player_piece() {
 
 	   // Now move the piece either left/right, or up/down, and notify server that player's piece was moved
 	   if(closest_x[0] == circle.attr("cx")) {
-	   	  var new_x = circle.attr("cx");
+	   	  var new_x = parseInt(circle.attr("cx"));
 	   	  var new_y = closest_y[0];
+	   	  console.log(new_x);
+	   	  console.log(new_y);
 
 	   	  var actual_x = new_x + svg_rect.left;
 	   	  var actual_y = new_y + svg_rect.top;
+	   	  console.log(actual_x);
+	   	  console.log(actual_y);
 	   	  var obj_at_coordinates = document.elementFromPoint(actual_x, actual_y);
 	   	  if(obj_at_coordinates != null && obj_at_coordinates.classList.contains("opponent_piece")) {
 	   	  	console.log("COLLISION")
@@ -66,10 +69,13 @@ function move_player_piece() {
 
 	   else {
 	   	  var new_x = closest_x[0];
-	   	  var new_y = circle.attr("cx");
+	   	  var new_y = parseInt(circle.attr("cy"));
 
 	   	  var actual_x = new_x + svg_rect.left
 	   	  var actual_y = new_y + svg_rect.top
+
+	   	  console.log(actual_x);
+	   	  console.log(actual_y);
 	   	  var obj_at_coordinates = document.elementFromPoint(actual_x, actual_y);
 	   	  if(obj_at_coordinates != null && obj_at_coordinates.classList.contains("opponent_piece")) {
 	   	  	console.log("COLLISION")

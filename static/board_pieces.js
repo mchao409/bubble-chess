@@ -72,13 +72,19 @@ for(var i = num_horizontal_lines-5; i < num_horizontal_lines; i++) {
 			circle.on("click", function(d,e){
 				d3.event.stopPropagation();
 				// e.stopImmediatePropagation();
+				var circles = document.getElementsByClassName("selected");
+
 				if(this.classList.contains("selected")) {
 					this.classList.add("not_selected");
 					this.classList.remove("selected");
 				}
 				else {
-					this.classList.add("selected");
-					this.classList.remove("not_selected");
+					var circles = document.getElementsByClassName("selected");
+					if(circles.length == 0) {
+						this.classList.add("selected");
+						this.classList.remove("not_selected");
+					}
+
 
 				}
 			})
