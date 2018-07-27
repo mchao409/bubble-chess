@@ -64,32 +64,27 @@ for(var i = num_horizontal_lines-5; i < num_horizontal_lines; i++) {
 			var circle = createCircle(cx, cy, circle_radius,"svg_board", "player_piece");
 			circle = createPattern(circle, count, "svg_board");
 			circle.classed("not_selected", true);
-			// circle.classList.add("not_selected");
-			// circle.classList.add("not_selected");
-			// Create pattern for circle
-
-			// circle.onclick = function(e) {
-			circle.on("click", function(d,e){
-				d3.event.stopPropagation();
+			circle.on("click", function(){
 				// e.stopImmediatePropagation();
-				var circles = document.getElementsByClassName("selected");
-
 				if(this.classList.contains("selected")) {
+					d3.event.stopPropagation();
+					console.log("STOPPING PROP")
 					this.classList.add("not_selected");
 					this.classList.remove("selected");
 				}
 				else {
 					var circles = document.getElementsByClassName("selected");
+
+					console.log("HERE CIRCLES")
 					if(circles.length == 0) {
+						d3.event.stopPropagation();
+						console.log(this);
 						this.classList.add("selected");
 						this.classList.remove("not_selected");
 					}
-
-
 				}
 			})
 			count++;
-
 		}
 	}
 }

@@ -1,10 +1,9 @@
-
 // Waits until opponent is ready to begin
 var button = document.getElementById("start_button");
 button.addEventListener("click", function() {
-    svg_board.removeEventListener("click", set_up_board_pieces);
     var isValid = checkBoardValid();
     if(isValid == false) return;
+    svg_board.removeEventListener("click", set_up_board_pieces);
     function listen() {
         var source = new EventSource("/start/?user_id=" + id);
         var target = document.getElementById("messages");
@@ -26,9 +25,7 @@ button.addEventListener("click", function() {
     listen();
 })
 
-
 function begin_game() {
-    console.log("beginning game")
     svg_board = d3.select("#svg_board");
     console.log(svg_board);
     move_player_piece();
@@ -37,5 +34,34 @@ function begin_game() {
     // })
 
     // svg_board.addEventListener("click", move_player_piece);
-
 }
+
+
+function piece_movement() {
+    // Deals with what occurs when the player's piece moves
+    // Returns true if player's piece wins, false otherwise
+    var info = get_player_piece_info();
+    function listen() {
+        
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
