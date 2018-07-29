@@ -1,4 +1,32 @@
-// Waits until opponent is ready to begin
+function checkBoardValid() {
+    var error = "";
+    d3.selectAll(".player_piece")
+        .each(function(d,i) {
+            // console.log(Math.round(this.getAttribute("cx")));
+            // console.log(Math.round(this.getAttribute("cy")));
+            if(board_upper_y + 7 * horizontal_lines_separation >= this.getAttribute("cy")) {
+                console.log(this);
+                error = "out";
+            }
+            for(var z = 0; z < safe_zones.length; z++) {
+                if(Math.round(safe_zones[z][0]) == Math.round(this.getAttribute("cx")) && Math.round(safe_zones[z][1]) == Math.round(this.getAttribute("cy"))) {
+                    console.log("hello")
+                    error = "safe";
+                }
+            }
+        })
+    if(error.length == 0) return true;
+    if(error == "out") {
+        alert("One or more pieces is out of bounds. Please readjust your placements.");
+        return false;
+    }
+    if(error == "safe") {
+        alert("One or more pieces is in a safe zone. Please readjust your placements");
+        return false;
+    }
+}
+
+
 var button = document.getElementById("start_button");
 button.addEventListener("click", function() {
     var isValid = checkBoardValid();
@@ -29,22 +57,9 @@ function begin_game() {
     svg_board = d3.select("#svg_board");
     console.log(svg_board);
     move_player_piece();
-    // svg_board.on("click", function() {
-    //     console.log("HI SVG CLICKED");
-    // })
-
-    // svg_board.addEventListener("click", move_player_piece);
 }
 
 
-function piece_movement() {
-    // Deals with what occurs when the player's piece moves
-    // Returns true if player's piece wins, false otherwise
-    var info = get_player_piece_info();
-    function listen() {
-        
-    }
-}
 
 
 
