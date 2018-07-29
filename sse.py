@@ -102,7 +102,6 @@ def start():
     current_player = find_player(player_id)
     current_player.ready_to_start()
     return Response(wait_to_start(current_player), mimetype="text/event-stream")
-
     # if(player_id != None):
     #     print(player_id)
     #     print(users)
@@ -113,7 +112,7 @@ def start():
 
     # return Response("Not a user");
 
-def manage_round(current_player):
+def manage_moves(current_player):
     print("This is " + str(current_player.user_id))
     print("This is the current round: " + str(current_player.current_round))
     print("This is other's round: " + str(current_player.other.current_round))
@@ -125,6 +124,7 @@ def manage_round(current_player):
     yield "data: " + json.dumps({"message": "This round is over.", 
         "positions": current_player.bubble_positions,
          "other_positions": player_other.bubble_positions,"stop":True}) + "\n\n"    
+
 
 @app.route('/player_move/', methods=['GET', 'POST'])
 def player_move():
@@ -140,13 +140,45 @@ def player_move():
     game_round = int(request.args.get("round"))
     current_player.update_round(game_round)
     # print(game_round)
-    return Response(manage_round(current_player), mimetype="text/event-stream")
+    return Response(manage_moves(current_player), mimetype="text/event-stream")
 
 
 def find_player(player_id):
     if player_id == 0:
         return player0
     return player1
+
+
+def waiting_for_turn(player):
+    other = player.other
+    while other.current_round == player.current_round:
+        yield "data: " + json.dumps({"message": "Waiting for other player to make a move."}) + "\n\n"
+    yield "data: " + json.dumps({"message": "It's your turn now."}) + "\n\n"
+
+@app.route('/wait_for_turn', methods=['GET', 'POST'])
+def wait_for_turn():
+    player_id = int(request.args.get("user_id"))
+    current_player = find_player(player_id)
+    other_player = current_player.other
+    return Response(waiting_for_turn(current_player), mimetype="text/event-stream")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, threaded=True)

@@ -105,7 +105,6 @@ function notify_piece_movement() {
     	info = get_player_piece_positions();
     }
     function listen() {
-    	console.log("about to listen");
         var source = new EventSource("player_move/?user_id=" + id + "&board_data=" + JSON.stringify(info) + "&round=0");
         var target = document.getElementById("messages");
         source.onmessage = function(msg) {
@@ -115,34 +114,55 @@ function notify_piece_movement() {
             if(json_data["stop"] == true) {
             	console.log("STOPPING");
             	source.close();
-            	console.log(json_data["positions"]);
-            	console.log(json_data["other_positions"]);
-            	return [json_data["positions"], json_data["other_positions"]];
+            	if(id == 0) {
+            		set_new_positions(invert_player_piece_positions(json_data["positions"]),
+            			invert_player_piece_positions(json_data["other_positions"]));
+            	}
+            	else set_new_positions(json_data["positions"], json_data["other_positions"]);
             }
         }
     }
-    var arr = listen();
-    set_new_positions(arr[0], arr[1]);
+    listen();
 }
 
 function set_new_positions(player_data, other_data) {
+	console.log(player_data);
+	console.log(other_data);
+	console.log(d3.select('[id="1"]'));
 	var count = 0
-	for(var i = 0; i < y_location_horizontal_lines; i++) {
-		for(var k = 0; k < x_location_vertical_lines; k++) {
-			if(player_data.hasOwnProperty(count)) {
+	console.log(d3.select(".not_updated"));
+	console.log(d3.selectAll(".not_updated"));
+	for(var i = 0; i < y_location_horizontal_lines.length; i++) {
+		for(var k = 0; k < x_location_vertical_lines.length; k++) {
+			console.log(i);
+			if(count in player_data) {
+				console.log("has property player_data")
 				var y = y_location_horizontal_lines[i];
     			var x = x_location_vertical_lines[k];
-				var rank = player_data[count]["rank"];
-				var circle = d3.select("#" + rank + "_circle");
+				var rank = player_data[count.toString()]["rank"];
+				var circle = d3.select('[id="' + rank + '"]')
 								.attr("cx", x)
 								.attr("cy", y);
 			}
+			if(count in other_data) {
+				console.log("has property other");
+				var y = y_location_horizontal_lines[i];
+				var x = x_location_vertical_lines[k];
+				var circle = d3.select(".not_updated")
+					.attr("cx", x)
+					.attr("cy", y)
+				circle.classed("updated", false);
+					// .classed("updated", true);
+				// console.log(circle.classList);
+				// circle.classList.remove("not_updated");
+				// circle.classList.add("updated");
+			}
 			count++;
-
-
-
 		}
 	}
+
+	// d3.selectAll(".not_updated")
+	// 	.remove();
 
 	// CONTINUE
 

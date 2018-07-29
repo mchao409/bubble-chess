@@ -26,7 +26,6 @@ function checkBoardValid() {
     }
 }
 
-
 var button = document.getElementById("start_button");
 button.addEventListener("click", function() {
     var isValid = checkBoardValid();
@@ -46,17 +45,36 @@ button.addEventListener("click", function() {
             if(json_data["can_start"] == true) {
                 console.log("here should close");
                 source.close();
-                begin_game();
+                start_game();
             }
         }
     }
     listen();
 })
 
-function begin_game() {
+function start_game() {
     svg_board = d3.select("#svg_board");
     console.log(svg_board);
-    move_player_piece();
+    var game_is_over == false;
+    var round_num = 1;
+    while(game_is_over == false) {
+        var turn = 0;
+        console.log("looping here");
+        if(turn == id) {
+            var target = document.getElementById("messages");
+            target.innerHTML = "Round " + round_num + ": Your turn!";
+            move_player_piece();
+        }
+        else {
+            function listen() {
+                var source = new EventSource("wait_for_turn/?user_id=" + id + "&round=" + round_num);
+            }
+            var target = document.getElementById("messages");
+            target.innerHTML = "Round " + round_num + ": Waiting for other player to make their choice";
+        }
+
+
+    }
 }
 
 

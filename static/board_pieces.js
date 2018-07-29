@@ -1,6 +1,6 @@
 // Creates the bubble pieces on the board
 
-// Create opponent pieces (blue)
+// Create opponent pieces
 for(var i = 0; i < 5; i++) {
 	for(var k = 0; k < 5; k++) {
 		if((i % 2 == 1 && k % 2 == 1) || (i == 2 && k == 2) || (i == num_horizontal_lines - 2 && k == num_vertical_lines - 2)) {
@@ -11,6 +11,7 @@ for(var i = 0; i < 5; i++) {
 			var cx = board_left_x + k * vertical_lines_separation;
 			var cy = board_upper_y + i * horizontal_lines_separation;
 			var circle = createCircle(cx, cy, circle_radius,"svg_board", "opponent_piece");
+			circle.classed("not_updated", true);
 		}
 	}
 }
