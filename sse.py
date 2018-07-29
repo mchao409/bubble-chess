@@ -11,6 +11,9 @@ from flask import Flask, json, Response, render_template
 from flask import request
 from player import Player
 import time
+import json
+from ast import literal_eval
+
 
 app = Flask(__name__)
 
@@ -75,7 +78,7 @@ def event():
         # yield 'data: ' + json.dumps(random.rand(1000).tolist()) + '\n\n'
         gevent.sleep(0.2)
 
-def pleaseWait(player):
+def wait_to_start(player):
     print("This is " + str(player.user_id))
     print("This is other: " + str(player.other))
     player_other = player.other
@@ -90,39 +93,15 @@ def pleaseWait(player):
     print(str(player.user_id) + " is finished")
     yield "data: " + json.dumps({"message": "Finished", "can_start": True}) + "\n\n"
 
-    # print(player.is_ready_to_start)
-    # print(player.other_id)
-    # while player.other_id == False:
-    #     print("waiting to enter")
-    #     if player.other_id != False:
-    #         break
-    #     yield 'data: ' + json.dumps("Waiting for player to enter") + "\n\n"
-    #     gevent.sleep(0.2)
-
-    # other_player = users[player.other_id]
-
-    # while other_player.is_ready_to_start != True:
-    #     print("not ready to start")
-    #     yield 'data: ' + json.dumps("Player not ready") + "\n\n"
-    #     gevent.sleep(0.2)
-    # # print("other player: " + str(player.other_id))
-    # # print("ending wait", file=sys.stdout)
-    # yield 'data: ' + json.dumps("Finished") + "\n\n"
-
 
 @app.route('/start/', methods=['GET', 'POST'])
 def start():
     # print(request.args)
     # print(request.get_json())
     player_id = int(request.args.get("user_id"));
-    current_player = None
-    if player_id == 0:
-        current_player = player0
-        print(current_player)
-    elif player_id == 1:
-        current_player = player1
+    current_player = find_player(player_id)
     current_player.ready_to_start()
-    return Response(pleaseWait(current_player), mimetype="text/event-stream")
+    return Response(wait_to_start(current_player), mimetype="text/event-stream")
 
     # if(player_id != None):
     #     print(player_id)
@@ -134,6 +113,40 @@ def start():
 
     # return Response("Not a user");
 
+def manage_round(current_player):
+    print("This is " + str(current_player.user_id))
+    print("This is the current round: " + str(current_player.current_round))
+    print("This is other's round: " + str(current_player.other.current_round))
+    player_other = current_player.other
+    while player_other.current_round != current_player.current_round:
+        yield "data: " + json.dumps({"message": "Waiting for opponent to make a move", "stop": False}) + "\n\n"
+        gevent.sleep(0.2)
+    current_player.manage_collision(player_other)
+    yield "data: " + json.dumps({"message": "This round is over.", 
+        "positions": current_player.bubble_positions,
+         "other_positions": player_other.bubble_positions,"stop":True}) + "\n\n"    
+
+@app.route('/player_move/', methods=['GET', 'POST'])
+def player_move():
+    # print(request.args)
+    player_id = int(request.args.get("user_id"))
+    current_player = find_player(player_id)
+    print(player_id)
+
+    board_data = literal_eval(request.args.get("board_data"))
+    current_player.update_player_bubble_positions(board_data)
+    print(board_data)
+
+    game_round = int(request.args.get("round"))
+    current_player.update_round(game_round)
+    # print(game_round)
+    return Response(manage_round(current_player), mimetype="text/event-stream")
+
+
+def find_player(player_id):
+    if player_id == 0:
+        return player0
+    return player1
 
 if __name__ == "__main__":
     app.run(debug=True, threaded=True)
