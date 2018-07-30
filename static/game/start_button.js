@@ -33,7 +33,8 @@ button.addEventListener("click", function() {
     if(isValid == false) return;
     svg_board.removeEventListener("click", set_up_board_pieces);
     function listen() {
-        var source = new EventSource("/start/?user_id=" + id);
+        var source = new EventSource("/start/?user_id=" + id + "&board_data=" 
+             + JSON.stringify(get_player_piece_positions()));
         var target = document.getElementById("messages");
         source.onmessage = function(msg) {
             var json_data = JSON.parse(msg.data);
@@ -53,9 +54,6 @@ button.addEventListener("click", function() {
     }
     listen();
 })
-
-
-
 
 
 

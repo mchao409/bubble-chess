@@ -99,7 +99,10 @@ def start():
     # print(request.args)
     # print(request.get_json())
     player_id = int(request.args.get("user_id"));
+    board = literal_eval(request.args.get("board_data"));
     current_player = find_player(player_id)
+    current_player.update_player_bubble_positions(board);
+
     current_player.ready_to_start()
     return Response(wait_to_start(current_player), mimetype="text/event-stream")
     # if(player_id != None):
@@ -142,18 +145,20 @@ def player_move():
     # print(game_round)
     return Response(manage_moves(current_player), mimetype="text/event-stream")
 
-
 def waiting_for_turn(player):
     other = player.other
     while other.current_round == player.current_round:
-        yield "data: " + json.dumps({"message": "Waiting for other player to make a move."}) + "\n\n"
+        yield "data: " + json.dumps({"message": "Waiting for other player to make a move.", "stop": False}) + "\n\n"
         gevent.sleep(0.2);
+    player.manage_collision(other)
     yield "data: " + json.dumps({"message": "It's your turn now.",
-        "other_positions": other.bubble_positions, "stop": True}) + "\n\n"
+        "other_positions": other.bubble_positions,"positions": player.bubble_positions,"stop": True}) + "\n\n"
 
 @app.route('/wait_for_turn/', methods=['GET', 'POST'])
 def wait_for_turn():
     player_id = int(request.args.get("user_id"))
+    print(str(player_id) + " is waiting")
+    round_num = int(request.args.get("round"));
     current_player = find_player(player_id)
     other_player = current_player.other
     print(current_player)

@@ -65,6 +65,7 @@ for(var i = num_horizontal_lines-5; i < num_horizontal_lines; i++) {
 			var circle = createCircle(cx, cy, circle_radius,"svg_board", "player_piece");
 			circle = createPattern(circle, count, "svg_board");
 			circle.classed("not_selected", true);
+			circle.classed("not_updated", true);
 			circle.on("click", function(){
 				// e.stopImmediatePropagation();
 				if(this.classList.contains("selected")) {
