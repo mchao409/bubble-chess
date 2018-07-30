@@ -143,24 +143,35 @@ def player_move():
     return Response(manage_moves(current_player), mimetype="text/event-stream")
 
 
+def waiting_for_turn(player):
+    other = player.other
+    while other.current_round == player.current_round:
+        yield "data: " + json.dumps({"message": "Waiting for other player to make a move."}) + "\n\n"
+        gevent.sleep(0.2);
+    yield "data: " + json.dumps({"message": "It's your turn now.",
+        "other_positions": other.bubble_positions, "stop": True}) + "\n\n"
+
+@app.route('/wait_for_turn/', methods=['GET', 'POST'])
+def wait_for_turn():
+    player_id = int(request.args.get("user_id"))
+    current_player = find_player(player_id)
+    other_player = current_player.other
+    print(current_player)
+    return Response(waiting_for_turn(current_player), mimetype="text/event-stream")
+
+
+
 def find_player(player_id):
     if player_id == 0:
         return player0
     return player1
 
 
-def waiting_for_turn(player):
-    other = player.other
-    while other.current_round == player.current_round:
-        yield "data: " + json.dumps({"message": "Waiting for other player to make a move."}) + "\n\n"
-    yield "data: " + json.dumps({"message": "It's your turn now."}) + "\n\n"
 
-@app.route('/wait_for_turn', methods=['GET', 'POST'])
-def wait_for_turn():
-    player_id = int(request.args.get("user_id"))
-    current_player = find_player(player_id)
-    other_player = current_player.other
-    return Response(waiting_for_turn(current_player), mimetype="text/event-stream")
+
+
+
+
 
 
 

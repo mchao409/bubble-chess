@@ -1,4 +1,35 @@
-// This file deals with what occurs when the player needs to move a piece during the game.
+// This file deals with what occurs during each round.
+
+game_is_over = false; 
+round_num = 0;
+function start_game() {
+    var svg_board = d3.select("#svg_board");
+    console.log(svg_board);
+    var game_is_over = false;
+    var round_num = 1;
+    var msg = document.getElementById("messages");
+    if(id == 0) {
+        msg.innerHTML = "Your turn!";
+        move_player_piece();
+    }
+    if(id == 1) {
+        function listen() {
+            var source = new EventSource("/wait_for_turn/?user_id=" + id);
+            var target = document.getElementById("messages");
+            source.onmessage = function(msg) {
+                console.log("message received");
+                var json_data = JSON.parse(msg.data)
+                target.innerHTML = json_data["message"];
+                if(json_data["stop"] == true) {
+                    source.close();
+                    move_player_piece();
+                }
+                console.log(json_data);
+            }
+        }
+        listen();
+    }
+}
 
 function find_closest(num, arr) {
 	// Helper function, finds the value in arr that is closest to num.
@@ -96,7 +127,6 @@ function get_player_piece_positions() {
 
 function notify_piece_movement() {
     // Deals with what occurs when the player's piece moves
-    // Returns true if player's piece wins, false otherwise
     var info = null;
     if (id == 0) {
     	info = invert_player_piece_positions(get_player_piece_positions());
@@ -105,7 +135,7 @@ function notify_piece_movement() {
     	info = get_player_piece_positions();
     }
     function listen() {
-        var source = new EventSource("player_move/?user_id=" + id + "&board_data=" + JSON.stringify(info) + "&round=0");
+        var source = new EventSource("player_move/?user_id=" + id + "&board_data=" + JSON.stringify(info) + "&round=" + round_num);
         var target = document.getElementById("messages");
         source.onmessage = function(msg) {
             var json_data = JSON.parse(msg.data);
@@ -123,6 +153,7 @@ function notify_piece_movement() {
         }
     }
     listen();
+
 }
 
 function set_new_positions(player_data, other_data) {
@@ -151,7 +182,8 @@ function set_new_positions(player_data, other_data) {
 				var circle = d3.select(".not_updated")
 					.attr("cx", x)
 					.attr("cy", y)
-				circle.classed("updated", false);
+				circle.classed("not_updated", false);
+				circle.classed("updated", true);
 					// .classed("updated", true);
 				// console.log(circle.classList);
 				// circle.classList.remove("not_updated");
@@ -160,15 +192,17 @@ function set_new_positions(player_data, other_data) {
 			count++;
 		}
 	}
-
-	// d3.selectAll(".not_updated")
-	// 	.remove();
+	d3.selectAll(".not_updated")
+		.remove()
+		.classed("updated", false)
+		.classed("not_updated", true);
 
 	// CONTINUE
-
-
+	if(game_is_over == false) {
+		round_num++;
+		start_game();
+	}
 }
-
 
 function invert_player_piece_positions(player_pos) {
 	// Converts coordinates to the opponent's view of the board
