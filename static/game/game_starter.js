@@ -4,10 +4,11 @@ round_num = 0;
 
 function start_game() {
     var svg_board = d3.select("#svg_board");
-    console.log(svg_board);
+    svg_board.on("click", null);
+    // console.log(svg_board);
     var game_is_over = false;
     var msg = document.getElementById("messages");
-    console.log(id);
+    // console.log(id);
     if(id == 0) {
         msg.innerHTML = "Your turn!";
         svg_board.on("click", move_player_piece);

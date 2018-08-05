@@ -17,10 +17,6 @@ from ast import literal_eval
 
 app = Flask(__name__)
 
-# global users
-# users = []
-# for i in range(10):
-#     users.append(False)
 player0 = None
 player1 = None
 

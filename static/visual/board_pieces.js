@@ -19,7 +19,7 @@ for(var i = 0; i < 5; i++) {
 // Create player pieces, put them in the svg on the right
 var svg_right = d3.select("#svg_right");
 var num_circles_horizontal = Math.floor(svg_right.attr("width")/(circle_radius * 2 + 4));
-console.log(num_circles_horizontal);
+// console.log(num_circles_horizontal);
 var count = 0;
 var row_num = 0;
 
@@ -70,17 +70,17 @@ for(var i = num_horizontal_lines-5; i < num_horizontal_lines; i++) {
 				// e.stopImmediatePropagation();
 				if(this.classList.contains("selected")) {
 					d3.event.stopPropagation();
-					console.log("STOPPING PROP")
+					// console.log("STOPPING PROP")
 					this.classList.add("not_selected");
 					this.classList.remove("selected");
 				}
 				else {
 					var circles = document.getElementsByClassName("selected");
 
-					console.log("HERE CIRCLES")
+					// console.log("HERE CIRCLES")
 					if(circles.length == 0) {
 						d3.event.stopPropagation();
-						console.log(this);
+						// console.log(this);
 						this.classList.add("selected");
 						this.classList.remove("not_selected");
 					}

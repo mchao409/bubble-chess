@@ -1,7 +1,7 @@
 // Deals with beginning the game -- setting up the board with the pieces -- 
 //  moving the player's pieces from right_svg to board
 
-console.log("SET UP PLAYER PIECES")
+// console.log("SET UP PLAYER PIECES")
 function set_up_board_pieces() {
     // console.log("hi");
     circle = d3.select(".selected");
@@ -16,7 +16,7 @@ function set_up_board_pieces() {
 
     if(Math.abs(event.clientX-svg_rect.left - closest_x[0]) >= vertical_lines_separation * 1.5 
         || Math.abs(event.clientY - svg_rect.top - closest_y[0]) >= horizontal_lines_separation * 1.5) {
-        console.log("here");
+        // console.log("here");
         return;
     }
     circle = document.getElementsByClassName("selected")[0];
@@ -34,7 +34,7 @@ function set_up_board_pieces() {
 
 var svg_board = document.getElementById("svg_board");
 svg_board.addEventListener("click", set_up_board_pieces);
-console.log("I AM HERE");
+// console.log("I AM HERE");
 
 
 

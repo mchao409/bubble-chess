@@ -70,8 +70,7 @@ function createPattern(circle, num_circle, svg_id) {
 		.attr("y", 0)
 	// console.log(defs);
 
-	circle
-		.attr("id", num_circle + "")
+	circle.attr("id", num_circle + "")
 		.style("fill", "black")
 		.style("fill", "url(#" + num_circle + "_circle)");
 	return circle;
