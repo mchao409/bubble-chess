@@ -22,22 +22,6 @@ player1 = None
 
 @app.route('/')
 def index():
-    # player1 = False
-    # player1_id = -1
-    # print(users)
-    # for i in range(len(users)):
-    #     if users[i] == False:
-    #         player1 = Player(i)
-    #         users[i] = player1
-    #         player1_id = i
-    #         break
-
-    # for i in range(len(users)):
-    #     if i != player1_id and users[i] != False and users[i].other_id == False:
-    #         player2 = users[i]
-    #         player2.add_other_player(player1_id)
-    #         player1.add_other_player(i)
-    #         break
     global player0
     global player1
     if player0 == None:
@@ -52,7 +36,6 @@ def index():
     # Current player is player 1
     return render_template("board.html", id=1)
 
-    # return render_template("board.html", id=player1_id)
 
 
 @app.route('/stream/', methods=['GET', 'POST'])
@@ -61,17 +44,10 @@ def stream():
 
 
 def event():
-    """For something more intelligent, take a look at Redis pub/sub
-    stuff. A great example can be found here__.
-
-    __ https://github.com/jakubroztocil/chat
-
-    """
     x = 0
     while x < 10:
         yield "data: " + str(x) + "\n\n"
         x += 1
-        # yield 'data: ' + json.dumps(random.rand(1000).tolist()) + '\n\n'
         gevent.sleep(0.2)
 
 def wait_to_start(player):
@@ -92,8 +68,7 @@ def wait_to_start(player):
 
 @app.route('/start/', methods=['GET', 'POST'])
 def start():
-    # print(request.args)
-    # print(request.get_json())
+
     player_id = int(request.args.get("user_id"));
     board = literal_eval(request.args.get("board_data"));
     current_player = find_player(player_id)
@@ -101,15 +76,7 @@ def start():
 
     current_player.ready_to_start()
     return Response(wait_to_start(current_player), mimetype="text/event-stream")
-    # if(player_id != None):
-    #     print(player_id)
-    #     print(users)
-    #     player = users[player_id]
-    #     player.ready_to_start()
-    #     return Response(pleaseWait(player), mimetype="text/event-stream")
-    # print("hiasdaii", file=sys.stdout)
 
-    # return Response("Not a user");
 
 def manage_moves(current_player):
     print("This is " + str(current_player.user_id))
@@ -127,7 +94,6 @@ def manage_moves(current_player):
 
 @app.route('/player_move/', methods=['GET', 'POST'])
 def player_move():
-    # print(request.args)
     player_id = int(request.args.get("user_id"))
     current_player = find_player(player_id)
     print(player_id)
@@ -138,7 +104,6 @@ def player_move():
 
     game_round = int(request.args.get("round"))
     current_player.update_round(game_round)
-    # print(game_round)
     return Response(manage_moves(current_player), mimetype="text/event-stream")
 
 def waiting_for_turn(player):
@@ -159,7 +124,6 @@ def wait_for_turn():
     other_player = current_player.other
     print(current_player)
     return Response(waiting_for_turn(current_player), mimetype="text/event-stream")
-
 
 
 def find_player(player_id):
