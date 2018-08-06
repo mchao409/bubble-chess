@@ -10,10 +10,10 @@ from numpy import random
 from flask import Flask, json, Response, render_template
 from flask import request
 from player import Player
+from game import Game
 import time
 import json
 from ast import literal_eval
-
 
 app = Flask(__name__)
 
@@ -34,6 +34,9 @@ def index():
         # Current player is player 0
         return render_template("board.html", id=0)
     # Current player is player 1
+    game = Game(player0, player1)
+    player0.add_game(game)
+    player1.add_game(game)
     return render_template("board.html", id=1)
 
 
@@ -41,7 +44,6 @@ def index():
 @app.route('/stream/', methods=['GET', 'POST'])
 def stream():
     return Response(event(), mimetype="text/event-stream");
-
 
 def event():
     x = 0
@@ -65,10 +67,8 @@ def wait_to_start(player):
     print(str(player.user_id) + " is finished")
     yield "data: " + json.dumps({"message": "Finished", "can_start": True}) + "\n\n"
 
-
 @app.route('/start/', methods=['GET', 'POST'])
 def start():
-
     player_id = int(request.args.get("user_id"));
     board = literal_eval(request.args.get("board_data"));
     current_player = find_player(player_id)
@@ -83,24 +83,32 @@ def manage_moves(current_player):
     print("This is the current round: " + str(current_player.current_round))
     print("This is other's round: " + str(current_player.other.current_round))
     player_other = current_player.other
+    winner = current_player.game.game_winner
+    if winner != None:
+        yield "data: " + json.dumps({"message": "", "stop": True, "game_winner": winner}) + "\n\n"
+    winner = current_player.manage_collision(player_other)
     while player_other.current_round != current_player.current_round:
-        yield "data: " + json.dumps({"message": "Waiting for opponent to make a move", "stop": False}) + "\n\n"
+        if winner != None:
+            current_player.game.add_winner(winner)
+            yield "data: " + json.dumps({"message": "Waiting for opponent to make a move", "stop": True, "game_winner": winner}) + "\n\n"
+        else:
+            yield "data: " + json.dumps({"message": "Waiting for opponent to make a move", "stop": False}) + "\n\n"
         gevent.sleep(0.2)
-    current_player.manage_collision(player_other)
+    winner = current_player.manage_collision(player_other)
+    if winner != None:
+        current_player.game.add_winner(winner)
     yield "data: " + json.dumps({"message": "This round is over.", 
         "positions": current_player.bubble_positions,
-         "other_positions": player_other.bubble_positions,"stop":True}) + "\n\n"    
+         "other_positions": player_other.bubble_positions,"stop":True, "game_winner": winner}) + "\n\n"    
 
 
 @app.route('/player_move/', methods=['GET', 'POST'])
 def player_move():
     player_id = int(request.args.get("user_id"))
     current_player = find_player(player_id)
-    print(player_id)
 
     board_data = literal_eval(request.args.get("board_data"))
     current_player.update_player_bubble_positions(board_data)
-    print(board_data)
 
     game_round = int(request.args.get("round"))
     current_player.update_round(game_round)
@@ -111,9 +119,13 @@ def waiting_for_turn(player):
     while other.current_round == player.current_round:
         yield "data: " + json.dumps({"message": "Waiting for other player to make a move.", "stop": False}) + "\n\n"
         gevent.sleep(0.2);
-    player.manage_collision(other)
+    if player.game.game_winner != None:
+        yield "data: " + json.dumps({"message": "", "stop": True, "game_winner": player.game.game_winner}) + "\n\n"
+    winner = player.manage_collision(other)
+    if winner != None:
+        player.game.game_winner.add(winner)
     yield "data: " + json.dumps({"message": "It's your turn now.",
-        "other_positions": other.bubble_positions,"positions": player.bubble_positions,"stop": True}) + "\n\n"
+        "other_positions": other.bubble_positions,"positions": player.bubble_positions,"stop": True, "game_winner": winner}) + "\n\n"
 
 @app.route('/wait_for_turn/', methods=['GET', 'POST'])
 def wait_for_turn():

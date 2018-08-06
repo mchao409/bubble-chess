@@ -53,9 +53,34 @@ var row_num = 0;
  
 
 var count = 0;
+outerLoop:
 for(var i = num_horizontal_lines-5; i < num_horizontal_lines; i++) {
 	for(var k = 0; k < 5; k++) {
-		if((i % 2 == 1 && k % 2 == 1) || (i == 2 && k == 2) || (i == 10 && k == 2)) {
+		if(i == num_horizontal_lines-5 && k == 0) {
+			// Flag
+			var cx = board_left_x + k * vertical_lines_separation;
+			var cy = board_upper_y + i * horizontal_lines_separation;
+			var circle = createCircle(cx, cy, circle_radius,"svg_board", "flag");
+			var svg = d3.select("#svg_board")
+			var defs = svg.append("svg:defs");
+			defs.append("svg:pattern")
+				.attr("id", "flag_pattern")
+				.attr("width", 2 * circle_radius)
+				.attr("height", 2 * circle_radius)
+				// .attr("patternUnits", "userSpaceOnUse")
+				.append("svg:image")
+				.attr("xlink:href", "static/img/blue/" + "flag_blue.png")
+				.attr("width", 2 * circle_radius)
+				.attr("height", 2 * circle_radius)
+				.attr("x", 0)
+				.attr("y", 0)
+	// console.log(defs);
+			circle.attr("id", "flag")
+				.style("fill", "black")
+				.style("fill", "url(#flag_pattern");
+		}
+
+		else if((i % 2 == 1 && k % 2 == 1) || (i == 2 && k == 2) || (i == 10 && k == 2)) {
 			// "Safe zones", cannot initially put a circle
 		}
 		else {
@@ -90,6 +115,7 @@ for(var i = num_horizontal_lines-5; i < num_horizontal_lines; i++) {
 		}
 	}
 }
+
 
 function changePosition(arr) {
 	// Updates the pieces to new positions, given by 'arr'

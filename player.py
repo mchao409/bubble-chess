@@ -1,3 +1,5 @@
+import copy
+
 class Player:
 	def __init__(self, user_id):
 		self.user_id = user_id
@@ -5,6 +7,9 @@ class Player:
 		self.other = None
 		self.current_round = None
 		self.bubble_positions = None
+
+	def add_game(self, game):
+		self.game = game
 
 	def add_other_player(self, other_player):
 		self.other = other_player
@@ -25,17 +30,33 @@ class Player:
 			for other_position, other_data in other.bubble_positions.items():
 				other_rank = other_data["rank"]
 				if position == other_position:
-					if rank > other_rank:
+					if rank == -1:
+
+						del self.bubble_positions[position]
+						print("COLLISION DETECTED, FLAG CAPTURED BY " + str(other.user_id))
+						return other.user_id
+
+					elif other_rank == -1:
+						del other.bubble_positions[position]
+						print("COLLISION DETECTED. FLAG CAPTURED BY " + str(self.user_id))
+						return self.user_id
+
+					elif rank > other_rank:
 						del other.bubble_positions[other_position]
 						print("COLLISION DETECTED. PLAYER " + str(self.user_id) + " wins")
+
 					elif other_rank > rank:
 						del self.bubble_positions[position]
 						print("COLLISION DETECTED. " + str(other.user_id) + " wins")
+
 					else:
 						del self.bubble_positions[position]
 						del other.bubble_positions[other_position]
 						print("COLLISION DETECTED. BOTH EQUAL, BOTH DELETED")
 					return
+
+
+
 
 
 

@@ -9,11 +9,19 @@ function get_player_piece_positions() {
             var y = y_location_horizontal_lines[i];
             var x = x_location_vertical_lines[k];
             var obj_at_coordinates = document.elementFromPoint(x + svg_rect.left, y + svg_rect.top);
-            if(obj_at_coordinates != null && obj_at_coordinates.classList.contains("player_piece")) {
-                data = {};
-                var obj = d3.select(obj_at_coordinates)
-                data["rank"] = obj.attr("id").replace("_circle", "");
-                piece_info[count] = data;
+            if(obj_at_coordinates != null) {
+                if(obj_at_coordinates.classList.contains("player_piece")) {
+                    var data = {};
+                    var obj = d3.select(obj_at_coordinates)
+                    data["rank"] = obj.attr("id").replace("_circle", "");
+                    piece_info[count] = data;  
+                }
+                else if(obj_at_coordinates.classList.contains("flag")) {
+                    var data = {};
+                    var obj = d3.select(obj_at_coordinates);
+                    data["rank"] = -1;
+                    piece_info[count] = data;
+                }
             }
             count++;
         }
@@ -37,11 +45,20 @@ function set_new_positions(player_data, other_data) {
                 var y = y_location_horizontal_lines[i];
                 var x = x_location_vertical_lines[k];
                 var rank = player_data[count.toString()]["rank"];
-                var circle = d3.select('[id="' + rank + '"]')
-                                .attr("cx", x)
-                                .attr("cy", y)
-                                .classed("updated", true)
-                                .classed("not_updated", false);
+                if(rank >= 0) {
+                    var circle = d3.select('[id="' + rank + '"]')
+                        .attr("cx", x)
+                        .attr("cy", y)
+                        .classed("updated", true)
+                        .classed("not_updated", false);
+                }
+                else {
+                    var circle = d3.select("#flag")
+                        .attr("cx", x)
+                        .attr("cy", y)
+                        .classed("updated", true)
+                        .classed("not_updated", false)
+                }
             }
 
             if(count in other_data) {
@@ -64,7 +81,16 @@ function set_new_positions(player_data, other_data) {
         .classed("updated", false)
         .classed("not_updated", true);
 
-    if(round_over == true) {
+    if(game_is_over) {
+        var target = document.getElementById("messages");
+        if(parseInt(game_winner) != id) {
+            target.innerHTML = "Sorry, you lost.";
+        }
+        else {
+            target.innerHTML = "You won the game!";
+        }
+    }
+    else if(round_over == true) {
         round_over = false;
         round_num++;
         start_game();
@@ -103,11 +129,23 @@ function notify_piece_movement() {
         var target = document.getElementById("messages");
         source.onmessage = function(msg) {
             var json_data = JSON.parse(msg.data);
+            console.log(json_data);
             // console.log(json_data["message"]);
             target.innerHTML = json_data["message"] + '<br>';
             if(json_data["stop"] == true) {
             	// console.log("STOPPING");
             	round_over = true;
+                if(json_data["game_winner"] != null) {
+                    var game_winner = json_data["game_winner"];
+                    if(game_winner != id) {
+                        target.innerHTML = "Sorry, you lost.";
+                    }
+                    else {
+                        target.innerHTML = "You won the game!";
+                    }
+                    source.close();
+                    return;
+                }
             	source.close();
             	if(id == 0) {
             		set_new_positions(invert_player_piece_positions(json_data["positions"]),
