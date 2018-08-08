@@ -15,17 +15,14 @@ function find_closest(num, arr) {
 	return[currClosest, currDiff];
 }
 
-// Called when the player's piece is attempted to be moved
-// Set this to svg_board's onclick when game starts
-
 function move_player_piece() {
 	// Determines whether the player's requested placement of a piece is valid. If it is,
 	//   the piece is moved, and a function is called to notify the server. Otherwise, nothing happens
-
+	// This is set to #svg_board's onclick to allow the player's pieces to be moved when it is their turn.
+	
 	circle = d3.select(".selected");
 	console.log(circle);
 	if(circle.empty()) {
-	   // console.log("here3");
 	   return;
 	}
 	var curr_x = parseInt(circle.attr("cx"));
@@ -46,7 +43,6 @@ function move_player_piece() {
 
 	if(curr_x - closest_x[0] == 0 && curr_y - closest_y[0] == 0) {
 	   	// Do nothing, same point
-	   // console.log("Same point");
 	   return;
 	}
 
@@ -61,6 +57,7 @@ function move_player_piece() {
 	document.getElementById("svg_board").removeEventListener("click", move_player_piece);
 }
 
+// Create a dictionary that maps each space number to pixel positions
 var space_to_coordinates = {};
 var count = 0;
 for(var i = 0; i < y_location_horizontal_lines.length; i++) {

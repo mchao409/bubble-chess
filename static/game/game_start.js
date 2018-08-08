@@ -4,11 +4,11 @@ round_num = 0;
 game_winner = null;
 
 function start_game() {
+    // This is called when both players are ready to start.
+    
     var svg_board = d3.select("#svg_board");
     svg_board.on("click", null);
-    // console.log(svg_board);
     var msg = document.getElementById("messages");
-    // console.log(id);
     if(id == 0) {
         msg.innerHTML = "Your turn!";
         svg_board.on("click", move_player_piece);
@@ -20,7 +20,7 @@ function start_game() {
             var target = document.getElementById("messages");
             source.onmessage = function(msg) {
                 var json_data = JSON.parse(msg.data)
-                console.log(json_data);
+                // console.log(json_dta);
                 target.innerHTML = json_data["message"];
                 if(json_data["game_winner"] != null) {
                     var game_winner = json_data["game_winner"];

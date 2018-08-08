@@ -7,10 +7,6 @@ body, .board_circle, .board_rect {
 	background-color: #fffef7;
 }
 
-h1 {
-/*	font-family: Georgia;
-*/}
-
 .board_rect, .board_circle, .board_path {
 	stroke: gray;
 	stroke-width: 1px;

@@ -1,9 +1,38 @@
+// Start button
+var button = document.getElementById("start_button");
+button.addEventListener("click", function() {
+    var isValid = checkBoardValid();
+    if(isValid == false) return;
+    svg_board.removeEventListener("click", set_up_board_pieces);
+    function listen() {
+        var source = new EventSource("/start/?user_id=" + id + "&board_data=" 
+             + JSON.stringify(get_player_piece_positions()));
+        var target = document.getElementById("messages");
+        source.onmessage = function(msg) {
+            var json_data = JSON.parse(msg.data);
+            target.innerHTML = json_data["message"] + '<br>';
+            // console.log(json_data["can_start"])
+            // console.log(msg.data)
+            if(json_data["can_start"] == false) {
+                console.log("can start is false");
+            }
+            if(json_data["can_start"] == true) {
+                console.log("here should close");
+                source.close();
+                // new_round(0);
+                start_game();
+            }
+        }
+    }
+    listen();
+})
+
 function checkBoardValid() {
+    // Checks that none of the pieces are out of bounds on the board.
+    
     var error = "";
     d3.selectAll(".player_piece")
-        .each(function(d,i) {
-            // console.log(Math.round(this.getAttribute("cx")));
-            // console.log(Math.round(this.getAttribute("cy")));
+        .each(function() {
             if(board_upper_y + 7 * horizontal_lines_separation >= this.getAttribute("cy")) {
                 console.log(this);
                 error = "out";
@@ -25,36 +54,6 @@ function checkBoardValid() {
         return false;
     }
 }
-
-// Start button
-var button = document.getElementById("start_button");
-button.addEventListener("click", function() {
-    var isValid = checkBoardValid();
-    if(isValid == false) return;
-    svg_board.removeEventListener("click", set_up_board_pieces);
-    function listen() {
-        var source = new EventSource("/start/?user_id=" + id + "&board_data=" 
-             + JSON.stringify(get_player_piece_positions()));
-        var target = document.getElementById("messages");
-        source.onmessage = function(msg) {
-            var json_data = JSON.parse(msg.data);
-            target.innerHTML = json_data["message"] + '<br>';
-            console.log(json_data["can_start"])
-            console.log(msg.data)
-            if(json_data["can_start"] == false) {
-                console.log("can start is false");
-            }
-            if(json_data["can_start"] == true) {
-                console.log("here should close");
-                source.close();
-                // new_round(0);
-                start_game();
-            }
-        }
-    }
-    listen();
-})
-
 
 
 

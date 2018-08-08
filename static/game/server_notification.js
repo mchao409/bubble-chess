@@ -1,11 +1,11 @@
 function get_player_piece_positions() {
-    // Gets all the positions of the player's pieces -- Helper function
-    var piece_info = {};
+    // Gets all the pixel positions of the player's pieces
+
+    var piece_info = {}; 
     var svg_rect = svg_board.getBoundingClientRect();
     var count = 0;
     for(var i = 0; i < y_location_horizontal_lines.length; i++) {
         for(var k = 0; k < x_location_vertical_lines.length; k++) {
-            // console.log(count);
             var y = y_location_horizontal_lines[i];
             var x = x_location_vertical_lines[k];
             var obj_at_coordinates = document.elementFromPoint(x + svg_rect.left, y + svg_rect.top);
@@ -32,8 +32,6 @@ function get_player_piece_positions() {
 function set_new_positions(player_data, other_data) {
     // Sets the positions of all the pieces on the board.
 
-    // console.log(player_data);
-    // console.log(other_data);
     console.log(d3.select('[id="1"]'));
     var count = 0
     console.log(d3.select(".not_updated"));
@@ -111,7 +109,6 @@ function invert_player_piece_positions(player_pos) {
     }
     return new_pos;
 }
-
 
 function notify_piece_movement() {
     d3.select("#svg_board").on("click", null);

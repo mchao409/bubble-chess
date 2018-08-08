@@ -2,6 +2,7 @@
 
 svgns = "http://www.w3.org/2000/svg";
 
+// Making calculations for the main svg board.
 var margin_vertical = 0.15;
 var margin_side = 0.3;
 
@@ -14,7 +15,6 @@ var horizontal_lines_separation = board_height * 1.0/(num_horizontal_lines-1);
 var board_width = window.innerWidth - 2 * window.innerWidth * margin_side;
 var vertical_lines_separation = board_width * 1.0/(num_vertical_lines-1);
 var circle_radius = Math.floor(horizontal_lines_separation/2.0) - 3;
-console.log(circle_radius);
 var board_left_x = circle_radius * 2 + 2;
 var board_upper_y = circle_radius * 2 + 2;
 
@@ -69,7 +69,6 @@ for(var i = 0; i < x_location_vertical_lines.length-1; i++) {
 }
 
 // Contains all the safe zones 
-
 var safe_zones = [];
 // Create boxes and circles on board
 for(var i = 0; i < num_horizontal_lines; i++) {
@@ -97,8 +96,8 @@ for(var i = 0; i < num_horizontal_lines; i++) {
 		}
 	}
 }
-// SVG on the right for initially storing circles
 
+// SVG on the right for initially storing circles
 svg_right = d3.select("#svg_right")
 	.attr("height", board_height)
 	.attr("width", (window.innerWidth - board_width) / 2 - 100)
