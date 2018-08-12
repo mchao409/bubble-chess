@@ -7,6 +7,7 @@ class Player:
 		self.other = None
 		self.current_round = None
 		self.bubble_positions = None
+		self.turn_over = None
 
 	def add_game(self, game):
 		self.game = game
@@ -31,7 +32,6 @@ class Player:
 				other_rank = other_data["rank"]
 				if position == other_position:
 					if rank == -1:
-
 						del self.bubble_positions[position]
 						print("COLLISION DETECTED, FLAG CAPTURED BY " + str(other.user_id))
 						return other.user_id

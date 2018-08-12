@@ -40,11 +40,15 @@ function move_player_piece() {
 	var actual_x = closest_x[0] + svg_rect.left;
 	var actual_y = closest_y[0] + svg_rect.top;
 	var obj_at_coordinates = document.elementFromPoint(actual_x, actual_y);
+	if(obj_at_coordinates.classList.contains("player_piece")) {
+		return;
+	}
 
 	if(curr_x - closest_x[0] == 0 && curr_y - closest_y[0] == 0) {
 	   	// Do nothing, same point
 	   return;
 	}
+
 
 	else {
 		// The points are fine, move and send new info to server

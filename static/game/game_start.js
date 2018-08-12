@@ -20,7 +20,7 @@ function start_game() {
             var target = document.getElementById("messages");
             source.onmessage = function(msg) {
                 var json_data = JSON.parse(msg.data)
-                // console.log(json_dta);
+                console.log(json_data);
                 target.innerHTML = json_data["message"];
                 if(json_data["game_winner"] != null) {
                     var game_winner = json_data["game_winner"];

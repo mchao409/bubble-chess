@@ -28,28 +28,65 @@ var row_num = 0;
 // 	var cy = circle_radius + 2 * circle_radius * row_num + 2 * row_num + 2;
 // 	for(var i = 0; i < num_circles_horizontal-1; i++) {
 // 		if(count > 19) break while_loop;
-// 		var cx = circle_radius + 2 * circle_radius * i + 2 * i + 2;
-// 		var circle = createCircle(cx,cy,circle_radius,"svg_right", "player_piece");
-// 		circle.classed("not_selected", true);
-// 		// circle.onclick = function(e) {
-// 		// createPattern(circle, count, "svg_right");
-// 		circle.on("click", function(){
-// 			console.log("hihi");
-// 			d3.event.stopPropagation();
-// 			if(this.classList.contains("selected")) {
-// 				this.classList.add("not_selected");
-// 				this.classList.remove("selected");
-// 			}
-// 			else {
-// 				if(document.getElementsByClassName("selected").length == 1) return;
-// 				this.classList.add("selected");
-// 				this.classList.remove("not_selected");
-// 			}
-// 		})
+// 		if(count == 19) {
+// 			var cx = circle_radius + 2 * circle_radius * i + 2 * i + 2;
+// 			var circle = createCircle(cx, cy, circle_radius,"svg_right", "player_piece");
+// 			svg = d3.select("#svg_right")
+// 			var defs = svg.append("svg:defs");
+// 			defs.append("svg:pattern")
+// 				.attr("id", "flag_pattern")
+// 				.attr("width", 2 * circle_radius)
+// 				.attr("height", 2 * circle_radius)
+// 				.append("svg:image")
+// 				.attr("xlink:href", "static/img/blue/" + "flag_blue.png")
+// 				.attr("width", 2 * circle_radius)
+// 				.attr("height", 2 * circle_radius)
+// 				.attr("x", 0)
+// 				.attr("y", 0)
+// 	// console.log(defs);
+// 			circle.attr("id", "flag")
+// 				.style("fill", "black")
+// 				.style("fill", "url(#flag_pattern");
+// 		}
+// 		else {
+// 			var cx = circle_radius + 2 * circle_radius * i + 2 * i + 2;
+// 			var circle = createCircle(cx,cy,circle_radius,"svg_right", "player_piece");
+// 			circle.classed("not_selected", true);
+// 			createPattern(circle, count, "svg_right");
+// 			// circle.on("click", function(){
+// 			// 	console.log("hihi");
+// 			// 	d3.event.stopPropagation();
+// 			// 	if(this.classList.contains("selected")) {
+// 			// 		this.classList.add("not_selected");
+// 			// 		this.classList.remove("selected");
+// 			// 	}
+// 			// 	else {
+// 			// 		if(document.getElementsByClassName("selected").length == 1) return;
+// 			// 		this.classList.add("selected");
+// 			// 		this.classList.remove("not_selected");
+// 			// 	}
+// 			// })
+// 		}
+
 // 		count++;
 // 	}
 // 	row_num++;
 // }
+
+d3.selectAll(".player_piece")
+	.on("click", function() {
+		d3.event.stopPropagation();
+		if(this.classList.contains("selected")) {
+			this.classList.add("not_selected");
+			this.classList.remove("selected");
+		}
+		else {
+			if(document.getElementsByClassName("selected").length == 1) return;
+			this.classList.add("selected");
+			this.classList.remove("not_selected");
+		}
+})
+
  
 
 var count = 0;

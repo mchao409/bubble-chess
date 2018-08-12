@@ -16,7 +16,8 @@ function get_player_piece_positions() {
                     data["rank"] = obj.attr("id").replace("_circle", "");
                     piece_info[count] = data;  
                 }
-                else if(obj_at_coordinates.classList.contains("flag")) {
+                else if(obj_at_coordinates.getAttribute("id") == "flag") {
+                    console.log("ADDING FLAG")
                     var data = {};
                     var obj = d3.select(obj_at_coordinates);
                     data["rank"] = -1;
@@ -32,7 +33,6 @@ function get_player_piece_positions() {
 function set_new_positions(player_data, other_data) {
     // Sets the positions of all the pieces on the board.
 
-    console.log(d3.select('[id="1"]'));
     var count = 0
     console.log(d3.select(".not_updated"));
     console.log(d3.selectAll(".not_updated"));
@@ -79,15 +79,20 @@ function set_new_positions(player_data, other_data) {
         .classed("updated", false)
         .classed("not_updated", true);
 
-    if(game_is_over) {
+    if(d3.select("#flag").empty()) {
         var target = document.getElementById("messages");
-        if(parseInt(game_winner) != id) {
-            target.innerHTML = "Sorry, you lost.";
-        }
-        else {
-            target.innerHTML = "You won the game!";
-        }
+        target.innerHTML = "Sorry, you lost the game.";
     }
+
+    // if(game_is_over) {
+    //     var target = document.getElementById("messages");
+    //     if(parseInt(game_winner) != id) {
+    //         target.innerHTML = "Sorry, you lost.";
+    //     }
+    //     else {
+    //         target.innerHTML = "You won the game!";
+    //     }
+    // }
     else if(round_over == true) {
         round_over = false;
         round_num++;

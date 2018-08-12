@@ -39,8 +39,6 @@ def index():
     player1.add_game(game)
     return render_template("board.html", id=1)
 
-
-
 @app.route('/stream/', methods=['GET', 'POST'])
 def stream():
     return Response(event(), mimetype="text/event-stream");
@@ -78,21 +76,26 @@ def start():
     return Response(wait_to_start(current_player), mimetype="text/event-stream")
 
 
-def manage_moves(current_player):
+def manage_moves(current_player, round_num):
     print("This is " + str(current_player.user_id))
     print("This is the current round: " + str(current_player.current_round))
     print("This is other's round: " + str(current_player.other.current_round))
     player_other = current_player.other
-    winner = current_player.game.game_winner
-    if winner != None:
-        yield "data: " + json.dumps({"message": "", "stop": True, "game_winner": winner}) + "\n\n"
     winner = current_player.manage_collision(player_other)
+    if winner != None:
+        yield "data: " + json.dumps({"message": "Game Over", "stop": True, "game_winner": winner}) + "\n\n"
+    winner = current_player.manage_collision(player_other)
+    if winner != None:
+        current_player.game.add_winner(winner)
+    current_player.update_round(round_num)
     while player_other.current_round != current_player.current_round:
-        if winner != None:
-            current_player.game.add_winner(winner)
-            yield "data: " + json.dumps({"message": "Waiting for opponent to make a move", "stop": True, "game_winner": winner}) + "\n\n"
-        else:
-            yield "data: " + json.dumps({"message": "Waiting for opponent to make a move", "stop": False}) + "\n\n"
+
+        # winner = current_player.game.game_winner
+        # if winner != None:
+        #     current_player.game.add_winner(winner)
+        #     yield "data: " + json.dumps({"message": "Waiting for opponent to make a move", "stop": True, "game_winner": winner}) + "\n\n"
+        # else:
+        yield "data: " + json.dumps({"message": "Waiting for opponent to make a move", "stop": False}) + "\n\n"
         gevent.sleep(0.2)
     winner = current_player.manage_collision(player_other)
     if winner != None:
@@ -111,21 +114,29 @@ def player_move():
     current_player.update_player_bubble_positions(board_data)
 
     game_round = int(request.args.get("round"))
-    current_player.update_round(game_round)
-    return Response(manage_moves(current_player), mimetype="text/event-stream")
+    # current_player.update_round(game_round)
+    return Response(manage_moves(current_player, game_round), mimetype="text/event-stream")
 
 def waiting_for_turn(player):
     other = player.other
     while other.current_round == player.current_round:
         yield "data: " + json.dumps({"message": "Waiting for other player to make a move.", "stop": False}) + "\n\n"
         gevent.sleep(0.2);
-    if player.game.game_winner != None:
-        yield "data: " + json.dumps({"message": "", "stop": True, "game_winner": player.game.game_winner}) + "\n\n"
+    gevent.sleep(0.2)
     winner = player.manage_collision(other)
     if winner != None:
-        player.game.game_winner.add(winner)
-    yield "data: " + json.dumps({"message": "It's your turn now.",
+        player.game.add_winner(winner)
+        yield "data: " + json.dumps({"message": "Game Over", "stop": True, "game_winner": player.game.game_winner}) + "\n\n"
+    while other.current_round != player.current_round:
+        yield "data: " + json.dumps({"message": "It's your turn now.",
         "other_positions": other.bubble_positions,"positions": player.bubble_positions,"stop": True, "game_winner": winner}) + "\n\n"
+    if player.game.game_winner != None:
+        print("someone has won")
+    yield "data: " + json.dumps({"message": "This round is over.", 
+        "positions": current_player.bubble_positions,
+         "other_positions": player_other.bubble_positions,"stop":True, "game_winner": winner}) + "\n\n"    
+
+
 
 @app.route('/wait_for_turn/', methods=['GET', 'POST'])
 def wait_for_turn():
