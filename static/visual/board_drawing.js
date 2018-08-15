@@ -71,6 +71,11 @@ for(var i = 0; i < x_location_vertical_lines.length-1; i++) {
 // Contains all the safe zones 
 var safe_zones = [];
 // Create boxes and circles on board
+var count = 0;
+var safe_zone_board_numbers = [];
+for(var i = 0; i < 65; i++) {
+	safe_zone_board_numbers.push(false);
+}
 for(var i = 0; i < num_horizontal_lines; i++) {
 	for(var k = 0; k < num_vertical_lines; k++) {
 		if(i >= 5 && i <= num_horizontal_lines-6) { 
@@ -82,8 +87,10 @@ for(var i = 0; i < num_horizontal_lines; i++) {
 			// Create circles -- "Safe zones"
 			var cx = board_left_x + k * vertical_lines_separation;
 			var cy = board_upper_y + i * horizontal_lines_separation;
-			createCircle(cx, cy, circle_radius,"svg_board", "board_circle");
+			var circle = createCircle(cx, cy, circle_radius,"svg_board", "board_circle");
+			circle.classed("safe_zone", true);
 			safe_zones.push([cx,cy]);
+			safe_zone_board_numbers[count] = true;
 		}
 
 		else {
@@ -94,6 +101,7 @@ for(var i = 0; i < num_horizontal_lines; i++) {
 			var width = circle_radius * 4;
 			createRectangle(x,y,width,height,"svg_board", "board_rect");
 		}
+		count++;
 	}
 }
 

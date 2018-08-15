@@ -13,6 +13,10 @@ function get_player_piece_positions() {
                 if(obj_at_coordinates.classList.contains("player_piece")) {
                     var data = {};
                     var obj = d3.select(obj_at_coordinates)
+                    // if(safe_zone_board_numbers[count]) {
+                    //     data["safe"] = true;
+                    // }
+                    // else data["safe"] = false;
                     data["rank"] = obj.attr("id").replace("_circle", "");
                     piece_info[count] = data;  
                 }
@@ -21,6 +25,7 @@ function get_player_piece_positions() {
                     var data = {};
                     var obj = d3.select(obj_at_coordinates);
                     data["rank"] = -1;
+                    // data["safe"] = false;
                     piece_info[count] = data;
                 }
             }

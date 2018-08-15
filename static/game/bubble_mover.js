@@ -39,7 +39,21 @@ function move_player_piece() {
 
 	var actual_x = closest_x[0] + svg_rect.left;
 	var actual_y = closest_y[0] + svg_rect.top;
-	var obj_at_coordinates = document.elementFromPoint(actual_x, actual_y);
+	// var obj_at_coordinates = document.elementFromPoint(actual_x, actual_y);
+	var objects = document.elementsFromPoint(actual_x, actual_y);
+	var has_opponent_piece = false;
+	var is_safe_zone = false;
+	for(var i = 0; i < objects.length; i++) {
+		if(objects[i].classList.contains("safe_zone")) is_safe_zone = true;
+		if(objects[i].classList.contains("opponent_piece")) has_opponent_piece = true;
+	}
+	if(has_opponent_piece && is_safe_zone) {
+		alert("Not a valid move");
+		return;
+	}
+	console.log(objects);
+	var obj_at_coordinates = objects[0];
+
 	if(obj_at_coordinates.classList.contains("player_piece")) {
 		return;
 	}
