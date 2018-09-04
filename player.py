@@ -30,6 +30,7 @@ class Player:
 			rank = data["rank"]
 			for other_position, other_data in other.bubble_positions.items():
 				other_rank = other_data["rank"]
+				print("Other_rank: " + str(other_rank) + "  rank: " + str(rank))
 				if position == other_position:
 					if rank == -1:
 						del self.bubble_positions[position]

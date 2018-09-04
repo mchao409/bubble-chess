@@ -23,55 +23,55 @@ var num_circles_horizontal = Math.floor(svg_right.attr("width")/(circle_radius *
 var count = 0;
 var row_num = 0;
 
-// while_loop:
-// while(count <= 19) {
-// 	var cy = circle_radius + 2 * circle_radius * row_num + 2 * row_num + 2;
-// 	for(var i = 0; i < num_circles_horizontal-1; i++) {
-// 		if(count > 19) break while_loop;
-// 		if(count == 19) {
-// 			var cx = circle_radius + 2 * circle_radius * i + 2 * i + 2;
-// 			var circle = createCircle(cx, cy, circle_radius,"svg_right", "player_piece");
-// 			svg = d3.select("#svg_right")
-// 			var defs = svg.append("svg:defs");
-// 			defs.append("svg:pattern")
-// 				.attr("id", "flag_pattern")
-// 				.attr("width", 2 * circle_radius)
-// 				.attr("height", 2 * circle_radius)
-// 				.append("svg:image")
-// 				.attr("xlink:href", "static/img/blue/" + "flag_blue.png")
-// 				.attr("width", 2 * circle_radius)
-// 				.attr("height", 2 * circle_radius)
-// 				.attr("x", 0)
-// 				.attr("y", 0)
-// 	// console.log(defs);
-// 			circle.attr("id", "flag")
-// 				.style("fill", "black")
-// 				.style("fill", "url(#flag_pattern");
-// 		}
-// 		else {
-// 			var cx = circle_radius + 2 * circle_radius * i + 2 * i + 2;
-// 			var circle = createCircle(cx,cy,circle_radius,"svg_right", "player_piece");
-// 			circle.classed("not_selected", true);
-// 			createPattern(circle, count, "svg_right");
-// 			// circle.on("click", function(){
-// 			// 	console.log("hihi");
-// 			// 	d3.event.stopPropagation();
-// 			// 	if(this.classList.contains("selected")) {
-// 			// 		this.classList.add("not_selected");
-// 			// 		this.classList.remove("selected");
-// 			// 	}
-// 			// 	else {
-// 			// 		if(document.getElementsByClassName("selected").length == 1) return;
-// 			// 		this.classList.add("selected");
-// 			// 		this.classList.remove("not_selected");
-// 			// 	}
-// 			// })
-// 		}
+while_loop:
+while(count <= 19) {
+	var cy = circle_radius + 2 * circle_radius * row_num + 2 * row_num + 2;
+	for(var i = 0; i < num_circles_horizontal-1; i++) {
+		if(count > 19) break while_loop;
+		if(count == 19) {
+			var cx = circle_radius + 2 * circle_radius * i + 2 * i + 2;
+			var circle = createCircle(cx, cy, circle_radius,"svg_right", "player_piece");
+			svg = d3.select("#svg_right")
+			var defs = svg.append("svg:defs");
+			defs.append("svg:pattern")
+				.attr("id", "flag_pattern")
+				.attr("width", 2 * circle_radius)
+				.attr("height", 2 * circle_radius)
+				.append("svg:image")
+				.attr("xlink:href", "static/img/blue/" + "flag_blue.png")
+				.attr("width", 2 * circle_radius)
+				.attr("height", 2 * circle_radius)
+				.attr("x", 0)
+				.attr("y", 0)
+	// console.log(defs);
+			circle.attr("id", "flag")
+				.style("fill", "black")
+				.style("fill", "url(#flag_pattern");
+		}
+		else {
+			var cx = circle_radius + 2 * circle_radius * i + 2 * i + 2;
+			var circle = createCircle(cx,cy,circle_radius,"svg_right", "player_piece");
+			circle.classed("not_selected", true);
+			createPattern(circle, count, "svg_right");
+			// circle.on("click", function(){
+			// 	console.log("hihi");
+			// 	d3.event.stopPropagation();
+			// 	if(this.classList.contains("selected")) {
+			// 		this.classList.add("not_selected");
+			// 		this.classList.remove("selected");
+			// 	}
+			// 	else {
+			// 		if(document.getElementsByClassName("selected").length == 1) return;
+			// 		this.classList.add("selected");
+			// 		this.classList.remove("not_selected");
+			// 	}
+			// })
+		}
 
-// 		count++;
-// 	}
-// 	row_num++;
-// }
+		count++;
+	}
+	row_num++;
+}
 
 d3.selectAll(".player_piece")
 	.on("click", function() {
@@ -89,69 +89,67 @@ d3.selectAll(".player_piece")
 
  
 
-var count = 0;
-outerLoop:
-for(var i = num_horizontal_lines-5; i < num_horizontal_lines; i++) {
-	for(var k = 0; k < 5; k++) {
-		if(i == num_horizontal_lines-5 && k == 0) {
-			// Flag
-			var cx = board_left_x + k * vertical_lines_separation;
-			var cy = board_upper_y + i * horizontal_lines_separation;
-			var circle = createCircle(cx, cy, circle_radius,"svg_board", "flag");
-			var svg = d3.select("#svg_board")
-			var defs = svg.append("svg:defs");
-			defs.append("svg:pattern")
-				.attr("id", "flag_pattern")
-				.attr("width", 2 * circle_radius)
-				.attr("height", 2 * circle_radius)
-				// .attr("patternUnits", "userSpaceOnUse")
-				.append("svg:image")
-				.attr("xlink:href", "static/img/blue/" + "flag_blue.png")
-				.attr("width", 2 * circle_radius)
-				.attr("height", 2 * circle_radius)
-				.attr("x", 0)
-				.attr("y", 0)
-	// console.log(defs);
-			circle.attr("id", "flag")
-				.style("fill", "black")
-				.style("fill", "url(#flag_pattern");
-		}
+// var count = 0;
+// outerLoop:
+// for(var i = num_horizontal_lines-5; i < num_horizontal_lines; i++) {
+// 	for(var k = 0; k < 5; k++) {
+// 		if(i == num_horizontal_lines-5 && k == 0) {
+// 			// Flag
+// 			var cx = board_left_x + k * vertical_lines_separation;
+// 			var cy = board_upper_y + i * horizontal_lines_separation;
+// 			var circle = createCircle(cx, cy, circle_radius,"svg_board", "flag");
+// 			var svg = d3.select("#svg_board")
+// 			var defs = svg.append("svg:defs");
+// 			defs.append("svg:pattern")
+// 				.attr("id", "flag_pattern")
+// 				.attr("width", 2 * circle_radius)
+// 				.attr("height", 2 * circle_radius)
+// 				.append("svg:image")
+// 				.attr("xlink:href", "static/img/blue/" + "flag_blue.png")
+// 				.attr("width", 2 * circle_radius)
+// 				.attr("height", 2 * circle_radius)
+// 				.attr("x", 0)
+// 				.attr("y", 0)
+// 			circle.attr("id", "flag")
+// 				.style("fill", "black")
+// 				.style("fill", "url(#flag_pattern");
+// 		}
 
-		else if((i % 2 == 1 && k % 2 == 1) || (i == 2 && k == 2) || (i == 10 && k == 2)) {
-			// "Safe zones", cannot initially put a circle
-		}
-		else {
-			// Create circle
-			var cx = board_left_x + k * vertical_lines_separation;
-			var cy = board_upper_y + i * horizontal_lines_separation;
-			var circle = createCircle(cx, cy, circle_radius,"svg_board", "player_piece");
-			circle = createPattern(circle, count, "svg_board");
-			circle.classed("not_selected", true);
-			circle.classed("not_updated", true);
-			circle.on("click", function(){
-				// e.stopImmediatePropagation();
-				if(this.classList.contains("selected")) {
-					d3.event.stopPropagation();
-					// console.log("STOPPING PROP")
-					this.classList.add("not_selected");
-					this.classList.remove("selected");
-				}
-				else {
-					var circles = document.getElementsByClassName("selected");
+// 		else if((i % 2 == 1 && k % 2 == 1) || (i == 2 && k == 2) || (i == 10 && k == 2)) {
+// 			// "Safe zones", cannot initially put a circle
+// 		}
+// 		else {
+// 			// Create circle
+// 			var cx = board_left_x + k * vertical_lines_separation;
+// 			var cy = board_upper_y + i * horizontal_lines_separation;
+// 			var circle = createCircle(cx, cy, circle_radius,"svg_board", "player_piece");
+// 			circle = createPattern(circle, count, "svg_board");
+// 			circle.classed("not_selected", true);
+// 			circle.classed("not_updated", true);
+// 			circle.on("click", function(){
+// 				// e.stopImmediatePropagation();
+// 				if(this.classList.contains("selected")) {
+// 					d3.event.stopPropagation();
+// 					// console.log("STOPPING PROP")
+// 					this.classList.add("not_selected");
+// 					this.classList.remove("selected");
+// 				}
+// 				else {
+// 					var circles = document.getElementsByClassName("selected");
 
-					// console.log("HERE CIRCLES")
-					if(circles.length == 0) {
-						d3.event.stopPropagation();
-						// console.log(this);
-						this.classList.add("selected");
-						this.classList.remove("not_selected");
-					}
-				}
-			})
-			count++;
-		}
-	}
-}
+// 					// console.log("HERE CIRCLES")
+// 					if(circles.length == 0) {
+// 						d3.event.stopPropagation();
+// 						// console.log(this);
+// 						this.classList.add("selected");
+// 						this.classList.remove("not_selected");
+// 					}
+// 				}
+// 			})
+// 			count++;
+// 		}
+// 	}
+// }
 
 
 function changePosition(arr) {

@@ -10,24 +10,34 @@ function get_player_piece_positions() {
             var x = x_location_vertical_lines[k];
             var obj_at_coordinates = document.elementFromPoint(x + svg_rect.left, y + svg_rect.top);
             if(obj_at_coordinates != null) {
+                // console.log(obj_at_coordinates)
                 if(obj_at_coordinates.classList.contains("player_piece")) {
-                    var data = {};
-                    var obj = d3.select(obj_at_coordinates)
+                    console.log(obj_at_coordinates.getAttribute("id"));
+                    data = {};
+                    var obj = d3.select(obj_at_coordinates);
+                    if(obj.attr("id") == "flag"){
+                        data["rank"] = -1;
+                    } 
+                    else {
+                        data["rank"] = obj.attr("id").replace("_circle", "");
+                    }
+                    // var data = {};
+                    // var obj = d3.select(obj_at_coordinates)
                     // if(safe_zone_board_numbers[count]) {
                     //     data["safe"] = true;
                     // }
                     // else data["safe"] = false;
-                    data["rank"] = obj.attr("id").replace("_circle", "");
+                    // data["rank"] = obj.attr("id").replace("_circle", "");
                     piece_info[count] = data;  
                 }
-                else if(obj_at_coordinates.getAttribute("id") == "flag") {
-                    console.log("ADDING FLAG")
-                    var data = {};
-                    var obj = d3.select(obj_at_coordinates);
-                    data["rank"] = -1;
-                    // data["safe"] = false;
-                    piece_info[count] = data;
-                }
+                // else if(obj_at_coordinates.getAttribute("id") == "flag") {
+                //     console.log("ADDING FLAG")
+                //     var data = {};
+                //     var obj = d3.select(obj_at_coordinates);
+                //     data["rank"] = -1;
+                //     // data["safe"] = false;
+                //     piece_info[count] = data;
+                // }
             }
             count++;
         }
