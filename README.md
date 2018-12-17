@@ -1,6 +1,6 @@
 # Bubble Chess
 
-### A 2-player capture the flag game created with Flask. 
+### A 2-player capture the flag game created with Flask (currently under development)
 
 
-Current functionality only allows one computer to open two browser windows of the game to play against each other.
+
